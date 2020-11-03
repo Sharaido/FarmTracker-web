@@ -1,9 +1,22 @@
-﻿// Session Info
-/*
-$(document).ready(function () {
+﻿
+function logoutBtn_OnClick() {
     $.ajax({
         type: "POST",
-        url: "/Members/GetSessionsUserInfo",
+        url: "/Members/SignOut",
+        success: function () {
+            location.reload();
+        },
+        error: function () {
+
+        }
+    })
+}
+// Session Info
+
+$(document).ready(function () {
+    $.ajax({
+        type: "GET",
+        url: "/Members/GetAuthenticatedUser",
         success: function (json) {
             userInfo = null
             if (json != "null" && json) {
@@ -40,31 +53,19 @@ function printDHUser(userInfo) {
                                 </div>
                                 <div id="savedAccounts" class="other-accounts"></div>
                                 <div class="dk-user-box-log">
-                                    <a href="/Members/Login" class="dk-btn">Add Account</a>
+                                    <!--<a href="/Members/SignIn" class="dk-btn">Add Account</a>-->
                                     <a id="logoutBtn" href="javascript:;" class="dk-btn">Logout</a>
                                 </div>
                             </div>`;
     } else {
-        dhUserBody = '<a href="/Members/Login" class="dh-log-btn">Login</a>'
+        dhUserBody = '<a href="/Members/SignIn" class="dh-log-btn">SignIn</a>'
     }
     $('#dhUser').html(dhUserBody)
     if (userInfo && $('#dhUser>a').length > 0) {
         $('#dhUser>a').click(dkDropdown)
         $('#logoutBtn').click(logoutBtn_OnClick)
-        savedAccounts_Ajax()
+        //savedAccounts_Ajax()
     }
-}
-function logoutBtn_OnClick() {
-    $.ajax({
-        type: "POST",
-        url: "/Members/Logout",
-        success: function (bool) {
-            location.reload();
-        },
-        error: function () {
-
-        }
-    })
 }
 function printNavUser(userInfo) {
     navUserBody = "";
@@ -74,11 +75,13 @@ function printNavUser(userInfo) {
                             <span>${userInfo.UserRName}</span>
                         </a>`;
     } else {
-        navUserBody = '<a href="/Members/Login" class="dk-btn sharp-btn">Login</a>'
+        navUserBody = '<a href="/Members/SignIn" class="dk-btn sharp-btn">SignIn</a>'
     }
     $('#navUser').html(navUserBody)
 }
 
+
+/*
 
 // Saved accounts list
 $(document).ready(function () {

@@ -41,16 +41,16 @@ $('#loginForm').submit(function(e){
         data: $("#loginForm").serialize(),
         success: function (json) {
             var loginReply = JSON.parse(json);
-            if (loginReply.result) {
+            if (loginReply.Result) {
                 //Success Login
-                if (loginReply.redirectAddress) {
-                    window.location.href = loginReply.redirectAddress;
+                if (loginReply.RedirectAddress) {
+                    window.location.href = loginReply.RedirectAddress;
                 } else {
                     window.location.href = "http://" + location.hostname + ":" + location.port;
                 }
             } else {
                 //Failed Login
-                if (loginReply.invalidSignInKey || loginReply.invalidPassword) {
+                if (loginReply.InvalidSignInKey || loginReply.InvalidPassword) {
                     showLoginStep1();
                     showWarn("Invalid username or password!");
                 }
