@@ -2,18 +2,18 @@
 $('#loginNextBtn').click(showLoginStep2)
 $('#loginBackBtn').click(showLoginStep1)
 
-function showLoginStep1() {debugger
+function showLoginStep1() {
     $('#signInStepUserKey').removeClass('passive').addClass('active')
     $('#signInStepPassword').removeClass('active').addClass('passive')
     $('#submittedUserKey').removeClass('active').addClass('passive')
     $('#SignInKey').focus()
-    footerBody = `<div>Don't you have any account? <a href="javascript:;" id="register_link">Create an account now!</a> </div>`
+    footerBody = `<div>Don't you have any account? <a href="/Members/SignUp" id="register_link">Create an account now!</a> </div>`
     $('#dk-signin-box .box-footer-sec').html(footerBody)
 }
 function showLoginStep2() {
-    if(!$("#SignInKey").valid())
+    if (!$("#SignInKey").valid())
         return;
-        
+
     $('#signInStepUserKey').removeClass('active').addClass('passive')
     $('#signInStepPassword').removeClass('passive').addClass('active')
     $('#submittedUserKey .text').html($('#SignInKey').val())
@@ -23,15 +23,15 @@ function showLoginStep2() {
     $('#dk-signin-box .box-footer-sec').html(footerBody)
 }
 
-$('#loginForm').submit(function(e){
+$('#loginForm').submit(function (e) {
     e.preventDefault();
     //Pressed enter in username input
-    if($('#signInStepUserKey').hasClass('active')){
+    if ($('#signInStepUserKey').hasClass('active')) {
         showLoginStep2();
-        return 
+        return
     }
-    if(!$("#loginForm").valid()){
-        return  
+    if (!$("#loginForm").valid()) {
+        return
     }
     $('#loginForm input[type="submit"]').attr('disabled', 'disabled').addClass('disabled')
     showLoading()
@@ -39,12 +39,12 @@ $('#loginForm').submit(function(e){
         type: "POST",
         url: "/Members/SignIn",
         data: $("#loginForm").serialize(),
-        success: function (json) {
-            var loginReply = JSON.parse(json);
-            if (loginReply.Result) {
+        success: function (loginReply) {
+            debugger
+            if (loginReply.result) {
                 //Success Login
-                if (loginReply.RedirectAddress) {
-                    window.location.href = loginReply.RedirectAddress;
+                if (loginReply.redirectAddress) {
+                    window.location.href = loginReply.redirectAddress;
                 } else {
                     window.location.href = "http://" + location.hostname + ":" + location.port;
                 }
@@ -55,17 +55,18 @@ $('#loginForm').submit(function(e){
                     showWarn("Invalid username or password!");
                 }
             }
-            //removeLoading();
+            $('#loginForm input[type="submit"]').removeAttr('disabled').removeClass('disabled')
+            removeLoading();
         },
         error: function () {
-            //removeLoading();
+            $('#loginForm input[type="submit"]').removeAttr('disabled').removeClass('disabled')
+            removeLoading();
         }
     })
-    $('#loginForm input[type="submit"]').removeAttr('disabled').removeClass('disabled')
-    removeLoading()
+
 })
 validator = $("#loginForm").validate({
-    onsubmit : false,
+    onsubmit: false,
     errorClass: "form-error",
     rules: {
         SignInKey: {
@@ -86,61 +87,107 @@ validator = $("#loginForm").validate({
 
 /* Sign In END */
 /* Sign Up  */
-
+/*
+$(document).ready(function () {
+    if ($('#r_day').length > 0) {
+        var options = "";
+        for (var i = 1; i <= 31; i++)
+            options += '<option value="' + i + '">' + i + '</option>';
+        $('#r_day').html(options)
+    }
+    if ($('#r_month').length > 0) {
+        var options = "";
+        for (var i = 1; i <= 12; i++)
+            options += '<option value="' + i + '">' + i + '</option>';
+        $('#r_month').html(options)
+    }
+    if ($('#r_year').length > 0) {
+        var options = "";
+        for (var i = new Date().getFullYear() - 13; i > new Date().getFullYear() - 113; i--)
+            options += '<option value="' + i + '">' + i + '</option>';
+        $('#r_year').html(options)
+    }
+})
+*/
 $('#signUpNext1').click(showSignUpStep2)
 $('#signUpBack2').click(showSignUpStep1)
-$('#signUpNext2').click(showSignUpStepSubmit)
-$('#signUpBack3').click(showSignUpStep2)
+//$('#signUpNext2').click(showSignUpStepSubmit)
+//$('#signUpBack3').click(showSignUpStep2)
 
-function showSignUpStep1(){
+function showSignUpStep1() {
     $('#signUpStep2').removeClass('active').addClass('passive')
     $('#signUpStep1').removeClass('passive').addClass('active')
-    $('#r_user_name').focus()
+    $('#Username').focus()
 }
-function showSignUpStep2(){
-    if(!$("#r_user_name").valid() || !$("#r_eposta").valid() || !$("#r_password").valid())
-        return;
-    $('#signUpStep1').removeClass('active').addClass('passive')
-    $('#signUpStepSubmit').removeClass('active').addClass('passive')
-    $('#signUpStep2').removeClass('passive').addClass('active')
-    $('#r_rname').focus()
-}
-function showSignUpStepSubmit(){
-    if(!$("#r_rname").valid() || !$("#r_surname").valid())
+function showSignUpStep2() {
+    clearWarnings()
+    if (!$("#Username").valid() || !$("#Email").valid() || !$("#Password").valid())
         return;
 
+    $('#signUpNext1').attr('disabled', 'disabled').addClass('disabled')
+    showLoading()
+    checkUsername()
 }
-function showSignUpStepResult(){
-    $('#signUpStepSubmit').removeClass('active').addClass('passive')
+function _showSignUpStep2() {
+    $('#signUpNext1').removeAttr('disabled').removeClass('disabled')
+    removeLoading()
+    $('#signUpStep1').removeClass('active').addClass('passive')
+    //$('#signUpStepSubmit').removeClass('active').addClass('passive')
+    $('#signUpStep2').removeClass('passive').addClass('active')
+    $('#Name').focus()
+}
+function showSignUpStepSubmit() {
+    if (!$("#Name").valid() || !$("#Surname").valid())
+        return;
+    /*$('#signUpStep2').removeClass('active').addClass('passive')
+    $('#signUpStepSubmit').removeClass('passive').addClass('active')
+    $('#r_day').focus()*/
+}
+function showSignUpStepResult() {
+    removeLoading()
+    //$('#signUpStepSubmit').removeClass('active').addClass('passive')
+    $('#signUpStep2').removeClass('active').addClass('passive')
     $('#signUpStepResult').removeClass('passive').addClass('active')
 }
-function signUpNextStep(){
+function signUpNextStep() {
     idOfActiveStep = $('#signUpForm .register-steps.active').attr('id');
-    switch(idOfActiveStep){
+    switch (idOfActiveStep) {
         case "signUpStep1": showSignUpStep2(); break;
-        case "signUpStep2": showSignUpStepSubmit(); break;
+        //case "signUpStep2": showSignUpStepSubmit(); break;
         default: alert("Error"); break;
     }
 }
-$('#signUpForm').submit(function(e){
+$('#signUpForm').submit(function (e) {
     e.preventDefault();
     //Submit form
-    if ($('#signUpStepSubmit').hasClass('active')) {
-        if(!$("#signUpForm").valid()){
+    if ($('#signUpStep2').hasClass('active')) {
+        if (!$("#signUpForm").valid()) {
             showWarn("There are invalid inputs!");
             return;
         }
-
+        /*if (!validBirthDate()) {
+            $('#r_date-error').html('Invalid date')
+            return;
+        }
+        $('#BornDate').val(`${$('#r_year').val()}-${$('#r_month').val()}-${$('#r_day').val()}`)
+        */
         $('#loginForm input[type="submit"]').attr('disabled', 'disabled').addClass('disabled')
         showLoading()
         $.ajax({
             type: "POST",
-            url: "/Members/",
+            url: "/Members/SignUp",
             data: $("#signUpForm").serialize(),
-            success: function (json) {
-
+            success: function (signUpReply) {
+                if (signUpReply.result) {
+                    showSignUpStepResult()
+                } else {
+                    showWarn("Something went wrong.")
+                    removeLoading()
+                }
             },
             error: function () {
+                showWarn("Something went wrong.")
+                removeLoading()
             }
         })
         $('#loginForm input[type="submit"]').removeAttr('disabled').removeClass('disabled')
@@ -149,21 +196,63 @@ $('#signUpForm').submit(function(e){
         signUpNextStep();
     }
 })
+function checkUsername() {
+    $.ajax({
+        type: "GET",
+        url: "/Members/IsUsedUsername",
+        data: { Username: $('#Username').val() },
+        success: function (bool) {
+            if (!bool) {
+                checkEmail()
+            } else {
+                showWarn("Username is used")
+                $('#signUpNext1').removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            showWarn("Something Went wrong.")
+            $('#signUpNext1').removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+function checkEmail() {
+    $.ajax({
+        type: "POST",
+        url: "/Members/IsUsedEmail",
+        data: { Email: $('#Email').val() },
+        success: function (bool) {
+            if (!bool) {
+                _showSignUpStep2()
+            } else {
+                showWarn("E-mail is used")
+                $('#signUpNext1').removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            showWarn("Something Went wrong.")
+            $('#signUpNext1').removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
 
 //Validations
-jQuery.validator.addMethod("usernameChars", function(val, e){
+jQuery.validator.addMethod("usernameChars", function (val, e) {
     return /^[a-zA-Z0-9._]*$/.test(val);
 }, "Username can contains english chars, numbers, dot and underscore.")
 
-jQuery.validator.addMethod("singleDotOrUnderscore", function(val, e){
+jQuery.validator.addMethod("singleDotOrUnderscore", function (val, e) {
     return /^(?!.*[_.]{2}).*$/.test(val);
 }, "You cannot use dots or underscores in a row.")
 
-jQuery.validator.addMethod("turkishCharsWithSpace", function(val, e){
+jQuery.validator.addMethod("turkishCharsWithSpace", function (val, e) {
     return /^[a-zA-ZğüöşıçĞÜÖŞİÇ ]*$/.test(val);
 }, "You can use turkish chars")
 
-jQuery.validator.addMethod("isNotEmptyOrNull", function(val, e){
+jQuery.validator.addMethod("isNotEmptyOrNull", function (val, e) {
     return !(val.length === 0 || !val.trim());;
 }, "This field is not be blank")
 
@@ -174,28 +263,28 @@ $("#signUpForm").validate({
     //errorLabelContainer: "#form_errors ul",
     //wrapper: "li",
     rules: {
-        r_user_name: {
+        Username: {
             required: true,
             minlength: 3,
             maxlength: 32,
             usernameChars: true,
             singleDotOrUnderscore: true
         },
-        r_eposta: {
+        Email: {
             required: true,
             email: true
         },
-        r_password: {
+        Password: {
             required: true,
             minlength: 6,
             maxlength: 255
         },
-        r_rname: {
+        Name: {
             required: true,
             isNotEmptyOrNull: true,
             turkishCharsWithSpace: true
         },
-        r_surname: {
+        Surname: {
             required: true,
             isNotEmptyOrNull: true,
             turkishCharsWithSpace: true
@@ -203,34 +292,48 @@ $("#signUpForm").validate({
 
     },
     messages: {
-        r_user_name: {
+        Username: {
             required: "Username is required",
             minlength: jQuery.validator.format("Please, at least {0} characters are necessary"),
             maxlength: jQuery.validator.format("Please, at most {0} characters are necessary"),
             usernameChars: "Username can contains english chars, numbers, dot and underscore.",
             singleDotOrUnderscore: "You cannot use dots or underscores in a row."
         },
-        r_eposta: {
+        Email: {
         },
-        r_password: {
+        Password: {
         },
-        r_rname: {
+        Name: {
         },
-        r_surname: {
+        Surname: {
         }
     }
 });
+
+/*
+function validBirthDate() {
+    var day = $('#r_day').val();
+    var month = $('#r_month').val();
+    var year = $('#r_year').val();
+    if (day && month && year) {
+        var date = new Date(parseInt(year), (parseInt(month) - 1), parseInt(day));
+        if (date.getMonth() == (parseInt(month) - 1))
+            return true;
+    }
+    return false;
+}
+*/
 
 //Validations End
 
 
 /* Sign Up END */
 
-function showLoading(e){
+function showLoading(e) {
     body = `<div class="cover-content" id="loadingScreen"><div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div></div>`
     $('#dk-signin-box .box-content-sec').append(body)
 }
-function removeLoading(){
+function removeLoading() {
     $('#loadingScreen').remove()
 }
 
@@ -240,4 +343,10 @@ function showWarn(str) {
 }
 function clearWarnings() {
     $('#dk-signin-box .warnings').html("")
+}
+function returnTrue() {
+    return true
+}
+function returnFalse() {
+    return false
 }

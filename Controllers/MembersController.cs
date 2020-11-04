@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FarmTracker_services.Models.DB;
 using FarmTracker_web.Models;
+using FarmTracker_web.Models.DB;
 using FarmTracker_web.Models.Members;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -30,7 +31,7 @@ namespace FarmTracker_web.Controllers
             return View();
         }
         [HttpPost]
-        public string SignIn(SignInRequest signInRequest)
+        public SignInResponse SignIn(SignInRequest signInRequest)
         {
             var body = JsonConvert.SerializeObject(signInRequest);
             var response = StaticFunctions.Request("Members/SignIn", body, HttpMethod.Get);
@@ -53,7 +54,7 @@ namespace FarmTracker_web.Controllers
                 signInResponse.Token = "";
             }
 
-            return JsonConvert.SerializeObject(signInResponse);
+            return signInResponse;
         }
 
         private void AddUserToCookies(Users user, SignInRequest signInRequest, SignInResponse signInResponse)
@@ -191,6 +192,49 @@ namespace FarmTracker_web.Controllers
         public IActionResult SignUp()
         {
             return View();
+        }
+        [HttpPost]
+        public SignUpResponse SignUp(SignUpRequest signUpRequest)
+        {
+            var r = StaticFunctions.Request(
+                "Members/GetNewUCodeForSignUp",
+                "",
+                HttpMethod.Get
+                );
+            GeneratedUcodes uCode = JsonConvert.DeserializeObject<GeneratedUcodes>(r);
+            if (uCode == null)
+            {
+                return new SignUpResponse { TooManyAttempts = true };
+            }
+            signUpRequest.GUC = uCode.Guc;
+
+            var r2 = StaticFunctions.Request(
+                "Members/SignUp",
+                JsonConvert.SerializeObject(signUpRequest),
+                HttpMethod.Post
+                );
+
+            return JsonConvert.DeserializeObject<SignUpResponse>(r2);
+        }
+        public bool IsUsedUsername(string Username)
+        {
+            var r = StaticFunctions.Request(
+                "Members/IsUsedUsername/" + Username,
+                "",
+                HttpMethod.Get
+                );
+
+            return JsonConvert.DeserializeObject<bool>(r);
+        }
+        public bool IsUsedEmail(string Email)
+        {
+            var r = StaticFunctions.Request(
+                "Members/IsUsedEmail/" + Email,
+                "",
+                HttpMethod.Get
+                );
+
+            return JsonConvert.DeserializeObject<bool>(r);
         }
     }
 }
