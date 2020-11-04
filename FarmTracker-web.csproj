@@ -5,4 +5,13 @@
     <RootNamespace>FarmTracker_web</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Content\img\uploads\" />
+    <Folder Include="wwwroot\Content\img\userPics\" />
+  </ItemGroup>
+
 </Project>
