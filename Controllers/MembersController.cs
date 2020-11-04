@@ -39,7 +39,7 @@ namespace FarmTracker_web.Controllers
             if (signInResponse.Result)
             {
                 var user = StaticFunctions.Request(
-                    "Members/GetAuthenticatedUser/" + signInRequest.SignInKey,
+                    "Members/GetUserFromSignInKey/" + signInRequest.SignInKey,
                     "",
                     HttpMethod.Get,
                     signInResponse.Token
@@ -109,18 +109,84 @@ namespace FarmTracker_web.Controllers
         public void SignOut()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            InactiveteSession();
+            ClearCookieUserSession();
+        }
+        private void InactiveteSession()
+        {
+            Guid? SUID = Cookies.User.s;
+            if (SUID != null)
+            {
+                var r = StaticFunctions.Request(
+                    "Members/InactiveteSession/" + SUID.ToString(),
+                    "",
+                    HttpMethod.Post,
+                    User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            }
+        }
+        private void ClearCookieUserSession()
+        {
+            CookieUser u = Cookies.User;
+            u.ui = null;
+            u.s = null;
+            Cookies.User = u;
         }
         public string GetAuthenticatedUser()
         {
             if (User.Identity.IsAuthenticated)
             {
-                return JsonConvert.SerializeObject(new
+                return GetAuthenticatedUserResponse();
+            }
+            else
+            {
+                if (Cookies.User.s != null && Cookies.User.ui != null)
                 {
-                    Username = User.FindFirst(claim => claim.Type == "Username")?.Value,
-                    UserRName = User.FindFirst(claim => claim.Type == ClaimTypes.Name)?.Value + " " + User.FindFirst(claim => claim.Type == ClaimTypes.Surname)?.Value,
-                });
+                    if (AuthenticateFromCookies())
+                    {
+                        return GetAuthenticatedUserResponse();
+                    }
+                }
             }
             return null;
+        }
+        private string GetAuthenticatedUserResponse()
+        {
+            return JsonConvert.SerializeObject(new
+            {
+                Username = User.FindFirst(claim => claim.Type == "Username")?.Value,
+                UserRName = User.FindFirst(claim => claim.Type == ClaimTypes.Name)?.Value + " " + User.FindFirst(claim => claim.Type == ClaimTypes.Surname)?.Value,
+            });
+        }
+        private bool AuthenticateFromCookies()
+        {
+            Guid? SUID = Cookies.User.s;
+            Guid? UUID = Cookies.User.ui;
+
+            var r = StaticFunctions.Request(
+                        "Members/AuthenticateFromCookies",
+                        JsonConvert.SerializeObject(new Sessions { Uuid = (Guid)UUID, Suid = (Guid)SUID, IsValid = false }),
+                        HttpMethod.Get
+                        );
+            var signInResponse = JsonConvert.DeserializeObject<SignInResponse>(r);
+            if (signInResponse.Result)
+            {
+                var r2 = StaticFunctions.Request(
+                    "Members/GetUsers/" + UUID,
+                    "",
+                    HttpMethod.Get,
+                    signInResponse.Token
+                );
+                var theUser = JsonConvert.DeserializeObject<Users>(r2);
+
+                SignIn(theUser, signInResponse);
+                return true;
+            }
+            else
+            {
+                ClearCookieUserSession();
+                return false;
+            }
         }
         public IActionResult SignUp()
         {
