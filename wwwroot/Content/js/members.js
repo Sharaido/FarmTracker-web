@@ -40,7 +40,6 @@ $('#loginForm').submit(function (e) {
         url: "/Members/SignIn",
         data: $("#loginForm").serialize(),
         success: function (loginReply) {
-            debugger
             if (loginReply.result) {
                 //Success Login
                 if (loginReply.redirectAddress) {

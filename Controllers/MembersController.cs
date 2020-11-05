@@ -88,6 +88,7 @@ namespace FarmTracker_web.Controllers
                 new Claim("Username", user.Username),
                 new Claim("Token", signInResponse.Token),
                 new Claim("Expiration", signInResponse.Expiration.ToString()),
+                new Claim("MemberType", user.Mtuid.ToString()),
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Surname, user.Surname),
                 new Claim(ClaimTypes.Role, user.Ruid.ToString()),

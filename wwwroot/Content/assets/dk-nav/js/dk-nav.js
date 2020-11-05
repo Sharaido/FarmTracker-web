@@ -85,21 +85,7 @@ dkNavigator = function(e){
 	dkNav.overlayEle.addEventListener("click", dkNav.toggleCSt);
 	dkNav.navHeaderBtn.addEventListener("click", dkNav.toggleCSt);
 	//nested links
-	var navChilds = dkNav.el.children;
-	for(var i = 0; navChilds.length > i; i++){
-		if(navChilds[i].tagName == "UL"){
-			var ulChilds = navChilds[i].children;
-			for(var k = 0; ulChilds.length > k; k++){
-				var liChilds = ulChilds[k].children;
-				for(var j = 0; liChilds.length > j; j++){
-					if(liChilds[j].tagName == "UL"){
-						ulChilds[k].classList.add("dk-nav-nested");
-						ulChilds[k].addEventListener("click", dkNav.activeSubLi);
-					}
-				}
-			}
-		}	
-	}
+	addNestedLinks(dkNav.el)
 	//add style
 	var styleEl = document.createElement("style");
 	styleEl.innerHTML = ':root{--nav-top: ' + dkNav.navTop + 'px;}\n';
@@ -117,4 +103,22 @@ dkNavigator = function(e){
 	
 	document.head.appendChild(styleEl);
 	
+}
+
+function addNestedLinks(dkNavEl) {
+	var navChilds = dkNavEl.children;
+	for (var i = 0; navChilds.length > i; i++) {
+		if (navChilds[i].tagName == "UL") {
+			var ulChilds = navChilds[i].children;
+			for (var k = 0; ulChilds.length > k; k++) {
+				var liChilds = ulChilds[k].children;
+				for (var j = 0; liChilds.length > j; j++) {
+					if (liChilds[j].tagName == "UL") {
+						ulChilds[k].classList.add("dk-nav-nested");
+						ulChilds[k].addEventListener("click", dkNav.activeSubLi);
+					}
+				}
+			}
+		}
+	}
 }

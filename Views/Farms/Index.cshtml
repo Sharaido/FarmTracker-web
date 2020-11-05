@@ -1,0 +1,115 @@
+﻿@model FarmTracker_web.Models.DB.Farms
+@{
+    ViewData["Title"] = "Index";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+    </ol>
+</nav>
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="true">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="pills-aProperty-tab" data-toggle="pill" href="#pills-aProperty" role="tab" aria-controls="pills-aProperty" aria-selected="true">aProperty</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="collaborators-tab" data-toggle="pill" href="#pills-collaborators" role="tab" aria-controls="pills-collaborators" aria-selected="false">Collaborators</a>
+    </li>
+</ul>
+<hr>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+        <div class="row">
+            <div class="col-10">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="" placeholder="Search Property">
+                </div>
+            </div>
+            <div class="col-2" style="text-align: right;">
+                <button type="button" class="btn btn-success" onclick="dkPopup({
+                            type: 'iframe',
+                            iframeSrc: 'form.html',
+                            title: 'Iframe Popup'
+                        })">
+                    New Property
+                </button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <a href="infield1.html">Infield 1</a>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <a href="infield1.html">Infield 1</a>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <a href="infield1.html">Infield 1</a>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <a href="infield1.html">Infield 1</a>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <a href="infield1.html">Ranch 1</a>
+            </div>
+        </div>
+        <br>
+    </div>
+    <div class="tab-pane fade" id="pills-aProperty" role="tabpanel" aria-labelledby="pills-aProperty-tab">
+        <div class="row">
+            <div class="col-10">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="" placeholder="Search Ranch">
+                </div>
+            </div>
+            <div class="col-2" style="text-align: right;">
+                <button type="button" class="btn btn-success" onclick="dkPopup({
+                            type: 'iframe',
+                            iframeSrc: 'form.html',
+                            title: 'Iframe Popup'
+                        })">
+                    New Ranch
+                </button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <a href="#">Ranch 1</a>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pills-collaborators" role="tabpanel" aria-labelledby="pills-collaborators-tab">
+
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="" placeholder="Search Collaborators">
+                </div>
+            </div>
+            <div class="col-4" style="text-align: right;">
+                <button type="button" class="btn btn-success">New Collaborators</button>
+            </div>
+        </div>
+        <div class="list-group">
+            <button type="button" class="list-group-item list-group-item-action d-flex align-items-center"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</button>
+            <button type="button" class="list-group-item list-group-item-action d-flex align-items-center"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</button>
+            <button type="button" class="list-group-item list-group-item-action d-flex align-items-center"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</button>
+            <button type="button" class="list-group-item list-group-item-action d-flex align-items-center"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</button>
+            <button type="button" class="list-group-item list-group-item-action d-flex align-items-center"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</button>
+        </div>
+    </div>
+</div>
