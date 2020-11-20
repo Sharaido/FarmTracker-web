@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FarmTracker_web.Models.DB;
+using FarmTracker_web.Models;
+using FarmTracker_web.Models.Farms;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,6 +15,13 @@ namespace FarmTracker_web.Controllers
     [Authorize]
     public class FarmsController : Controller
     {
+        public readonly IHttpContextAccessor _httpContextAccessor;
+        public readonly SessionModel Sessions;
+        public FarmsController(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+            Sessions = new SessionModel(_httpContextAccessor.HttpContext.Session);
+        }
 
         [HttpGet("[controller]/{FUID}")]
         public IActionResult Index(string FUID)
@@ -34,7 +43,7 @@ namespace FarmTracker_web.Controllers
             {
                 return NotFound();
             }
-
+            Sessions.CurrentFarmName = farm.Name;
             return View(farm);
         }
         [HttpGet]
@@ -70,6 +79,56 @@ namespace FarmTracker_web.Controllers
                 return properties;
             }
             return null;
-        } 
+        }
+
+        [HttpGet("[controller]/{FUID}/{PUID}")]
+        public IActionResult Property(string FUID, string PUID)
+        {
+            if (FUID == null || PUID == null)
+            {
+                return NotFound();
+            }
+
+            var r = StaticFunctions.Request(
+                "Farms/Properties/" + FUID + "/" + PUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+
+            ViewData["CurrentFarmName"] = Sessions.CurrentFarmName;
+
+            if (r != null)
+            {
+                var property = JsonConvert.DeserializeObject<FarmProperties>(r);
+                return View(property);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("[controller]/GetFPEntities/{PUID}")]
+        public IEnumerable<EntityOfFp> GetFPEntities(string PUID)
+        {
+            if (PUID == null)
+            {
+                return null;
+            }
+
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/" + PUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var entities = JsonConvert.DeserializeObject<IEnumerable<EntityOfFp>>(r);
+                return entities;
+            }
+            return null;
+        }
     }
 }
