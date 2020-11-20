@@ -33,6 +33,9 @@ namespace FarmTracker_web
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +66,8 @@ namespace FarmTracker_web
             };
 
             app.UseCookiePolicy(cookiePolicyOptions);
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
