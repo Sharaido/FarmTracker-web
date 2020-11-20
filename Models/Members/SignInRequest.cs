@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FarmTracker_web.Models
+namespace FarmTracker_web.Models.Members
 {
     public class SignInRequest
     {

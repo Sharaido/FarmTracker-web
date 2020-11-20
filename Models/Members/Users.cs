@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FarmTracker_services.Models.DB
+namespace FarmTracker_web.Models.Members
 {
     public partial class Users
     {
-        public Users()
-        {}
-
         public Guid Uuid { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }

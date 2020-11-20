@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FarmTracker_web.Models.DB
+namespace FarmTracker_web.Models.Members
 {
     public partial class GeneratedUcodes
     {
