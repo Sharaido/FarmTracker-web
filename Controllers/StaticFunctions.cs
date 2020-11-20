@@ -30,10 +30,18 @@ namespace FarmTracker_web.Controllers
                     }
                     using (HttpResponseMessage response = client.SendAsync(request).Result)
                     {
-                        using (HttpContent content = response.Content)
+                        if (response.IsSuccessStatusCode)
                         {
-                            var jsonResponse = content.ReadAsStringAsync().Result;
-                            return jsonResponse;
+                            using (HttpContent content = response.Content)
+                            {
+
+                                var jsonResponse = content.ReadAsStringAsync().Result;
+                                return jsonResponse;
+                            }
+                        }
+                        else
+                        {
+                            return null;
                         }
                     }
                 }

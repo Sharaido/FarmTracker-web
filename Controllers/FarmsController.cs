@@ -50,5 +50,26 @@ namespace FarmTracker_web.Controllers
 
             return farms;
         }
+        [HttpGet("[controller]/GetFarmPropertiesFromFUID/{FUID}")]
+        public IEnumerable<FarmProperties> GetFarmPropertiesFromFUID(string FUID)
+        {
+            if (FUID == null)
+            {
+                return null;
+            }
+
+            var r = StaticFunctions.Request(
+                "Farms/Properties/" + FUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var properties = JsonConvert.DeserializeObject<IEnumerable<FarmProperties>>(r);
+                return properties;
+            }
+            return null;
+        } 
     }
 }

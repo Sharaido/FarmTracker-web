@@ -142,7 +142,7 @@ namespace FarmTracker_web.Controllers
             }
             else
             {
-                if (Cookies.User.s != null && Cookies.User.ui != null)
+                if (Cookies.User != null && Cookies.User.s != null && Cookies.User.ui != null)
                 {
                     if (AuthenticateFromCookies())
                     {
