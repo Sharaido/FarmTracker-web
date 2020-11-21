@@ -41,6 +41,15 @@ namespace FarmTracker_web.Controllers
                         }
                         else
                         {
+                            if (response.StatusCode == HttpStatusCode.Unauthorized)
+                            {
+                                using (HttpContent content = response.Content)
+                                {
+
+                                    var jsonResponse = content.ReadAsStringAsync().Result;
+                                    return jsonResponse;
+                                }
+                            }
                             return null;
                         }
                     }

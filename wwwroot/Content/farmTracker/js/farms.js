@@ -68,7 +68,7 @@ function printEntities(entities) {
     allEntitiesBody = ""
     if (entities) {
         for (var entity of entities) {
-            allEntitiesBody += `<a href="${window.location.href.toString() + "/" + entity.puid}" class="list-group-item list-group-item-action d-flex align-items-center" style="color: #495057; font-weight: normal;">`
+            allEntitiesBody += `<a href="${window.location.href.toString() + "/" + entity.euid}" class="list-group-item list-group-item-action d-flex align-items-center" style="color: #495057; font-weight: normal;">`
             if (entity.id) 
                 allEntitiesBody += `<span class="badge badge-info badge-pill">${entity.id}</span> `
             allEntitiesBody += `${entity.name} <span class="badge badge-primary badge-pill">${entity.count}</span> </a>`

@@ -44,6 +44,7 @@ namespace FarmTracker_web.Controllers
                 return NotFound();
             }
             Sessions.CurrentFarmName = farm.Name;
+            Sessions.CurrentFarmUID = farm.Fuid.ToString();
             return View(farm);
         }
         [HttpGet]
@@ -101,6 +102,7 @@ namespace FarmTracker_web.Controllers
             if (r != null)
             {
                 var property = JsonConvert.DeserializeObject<FarmProperties>(r);
+                Sessions.CurrentPropertyName = property.Name;
                 return View(property);
             }
             else
@@ -129,6 +131,36 @@ namespace FarmTracker_web.Controllers
                 return entities;
             }
             return null;
+        }
+
+        [HttpGet("[controller]/{FUID}/{PUID}/{EUID}")]
+        public IActionResult Entity(string FUID, string PUID, string EUID)
+        {
+            if (FUID == null || PUID == null || EUID == null)
+            {
+                return NotFound();
+            }
+
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/" + PUID + "/" + EUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+
+            ViewData["CurrentFarmName"] = Sessions.CurrentFarmName;
+            ViewData["CurrentFarmUID"] = Sessions.CurrentFarmUID;
+            ViewData["CurrentPropertyName"] = Sessions.CurrentPropertyName;
+
+            if (r != null)
+            {
+                var entity = JsonConvert.DeserializeObject<EntityOfFp>(r);
+                return View(entity);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

@@ -16,6 +16,16 @@ namespace FarmTracker_web.Models
             get => Get<string>("CurrentFarmName");
             set => Set("CurrentFarmName", value);
         }
+        public string CurrentFarmUID
+        {
+            get => Get<string>("CurrentFarmUID");
+            set => Set("CurrentFarmUID", value);
+        }
+        public string CurrentPropertyName
+        {
+            get => Get<string>("CurrentPropertyName");
+            set => Set("CurrentPropertyName", value);
+        }
 
 
 
