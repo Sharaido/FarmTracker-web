@@ -60,6 +60,22 @@ namespace FarmTracker_web.Controllers
 
             return farms;
         }
+        [HttpPost]
+        public Farms AddFarm(Farms farm)
+        {
+            var r = StaticFunctions.Request(
+                "Farms",
+                JsonConvert.SerializeObject(farm),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var rFarm = JsonConvert.DeserializeObject<Farms>(r);
+                return rFarm;
+            }
+            return null;
+        }
         [HttpGet("[controller]/GetFarmPropertiesFromFUID/{FUID}")]
         public IEnumerable<FarmProperties> GetFarmPropertiesFromFUID(string FUID)
         {

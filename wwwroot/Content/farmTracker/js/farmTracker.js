@@ -18,8 +18,100 @@ function printFarmLinks(farms){
                 <ul>`
     for (var farm of farms)
         body +=     `<li><a href="/Farms/${farm.fuid}">${farm.name}</a></li>`   
-    body +=     `<li><a href="javascript:;">Add Farm</li>`
+    body +=     `<li><a href="javascript:addFarmPopup();">Add Farm</li>`
     body +=   `</ul>`
     $('#farmLinks').html(body)
     addNestedLinks($('#dk-nav')[0])
+}
+
+function addFarmPopup() {
+    var addFarmFormBody = `
+    <div class="container">
+        <form id="addFarmForm" method="POST">
+            <div class="form-group">
+                <label for="">Farm Name</label>
+                <input type="text" id="Name" name="Name" class="form-control" minlength="3" maxlength="50" required>
+            </div>
+            <div class="form-group">
+                <label for="">Description</label>
+                <textarea id="Description" name="Description" class="form-control" rows="3"></textarea>
+            </div>
+        </form>
+    </div>`
+    addFarmFormPopup = dkPopup({
+        title: 'Add Farm',
+        type: 'confirm',
+        confirmClick: function () {
+            submitAddFarmForm()
+        },
+        content: addFarmFormBody
+    })
+    addFarmFormValidations()
+}
+
+function submitAddFarmForm() {
+    if (!$("#addFarmForm").valid()) {
+        return;
+    }
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($("#addFarmForm"))
+    $.ajax({
+        type: "POST",
+        url: "/Farms/AddFarm",
+        data: $('#addFarmForm').serialize(),
+        success: function (result) {
+            if (result) {
+                //addFarmFormPopup.closeDkPop();
+                window.location.href = "http://" + location.hostname + ":" + location.port + "/Farms/" + result.fuid
+            } else {
+                alert("Farms could not be inserted#1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("Farms could not be inserted#2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+
+function addFarmFormValidations() {
+    $("#addFarmForm").validate({
+        onsubmit: false,
+        errorClass: "clr-danger",
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 255
+            }
+
+        },
+        messages: {
+            Name: {
+                required: "Name is required",
+                minlength: jQuery.validator.format("Please, at least {0} characters are necessary"),
+                maxlength: jQuery.validator.format("Please, at most {0} characters are necessary")
+            },
+            Description: {
+            }
+        }
+    });
+}
+
+
+
+
+function showLoading(e) {
+    body = `<div class="cover-content" id="loadingScreen"><div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div></div>`
+    e.append(body)
+}
+function removeLoading() {
+    $('#loadingScreen').remove()
 }
