@@ -23,6 +23,17 @@ namespace FarmTracker_web.Models.Farms
         public bool DeletedFlag { get; set; }
         public DateTime? DeletedDate { get; set; }
         public Guid? DeletedByUuid { get; set; }
+        public string CP_1 { get; set; }
+        public string CP_2 { get; set; }
+        public string CP_3 { get; set; }
+        public string CP_4 { get; set; }
+        public string CP_5 { get; set; }
+        public string CP_6 { get; set; }
+        public string CP_7 { get; set; }
+        public string CP_8 { get; set; }
+        public string CP_9 { get; set; }
+        public string CP_10 { get; set; }
+
 
     }
 }

@@ -165,6 +165,104 @@ namespace FarmTracker_web.Controllers
             return null;
         }
 
+        [HttpPost]
+        public EntityOfFp AddFPEntity(EntityOfFp entity)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/",
+                JsonConvert.SerializeObject(entity),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var rEntity = JsonConvert.DeserializeObject<EntityOfFp>(r);
+                /* This part must be improved */
+                if (entity.CP_1 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 1, Value = entity.CP_1 });
+                if (entity.CP_2 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 2, Value = entity.CP_2 });
+                if (entity.CP_3 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 3, Value = entity.CP_3 });
+                if (entity.CP_4 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 4, Value = entity.CP_4 });
+                if (entity.CP_5 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 5, Value = entity.CP_5 });
+                if (entity.CP_6 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 6, Value = entity.CP_6 });
+                if (entity.CP_7 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 7, Value = entity.CP_7 });
+                if (entity.CP_8 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 8, Value = entity.CP_8 });
+                if (entity.CP_9 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 9, Value = entity.CP_9 });
+                if (entity.CP_10 != null)
+                    AddCOPValue(new EntityCopvalues { Euid = rEntity.Euid, Puid = 10, Value = entity.CP_10 });
+                /* This part must be improved  END*/
+
+                return rEntity;
+            }
+            return null;
+        }
+        private void AddCOPValue(EntityCopvalues value)
+        {
+            StaticFunctions.Request(
+                "Farms/Properties/Entities/COPValues/",
+                JsonConvert.SerializeObject(value),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+        }
+
+        [HttpGet("[controller]/SubCategories/{CUID}")]
+        public IEnumerable<Categories> GetSubCategories(int CUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/SubCategories/" + CUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var categories = JsonConvert.DeserializeObject<IEnumerable<Categories>>(r);
+                return categories;
+            }
+            return null;
+        }
+        [HttpGet("[controller]/CategoryProperties/{CUID}")]
+        public IEnumerable<CategoryOfProperties> GetCategoryProperties(int CUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/CategoryProperties/" + CUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var cProperties = JsonConvert.DeserializeObject<IEnumerable<CategoryOfProperties>>(r);
+                return cProperties;
+            }
+            return null;
+        }
+        [HttpGet("[controller]/COPValues/{PUID}")]
+        public IEnumerable<Copvalues> GetCOPValues(int PUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/COPValues/" + PUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var values = JsonConvert.DeserializeObject<IEnumerable<Copvalues>>(r);
+                return values;
+            }
+            return null;
+        }
+
         [HttpGet("[controller]/{FUID}/{PUID}/{EUID}")]
         public IActionResult Entity(string FUID, string PUID, string EUID)
         {
