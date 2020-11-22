@@ -308,5 +308,37 @@ namespace FarmTracker_web.Controllers
             }
             return null;
         }
+        [HttpPost]
+        public IncomeAndExpeneses AddIncome(IncomeAndExpeneses income)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Incomes/",
+                JsonConvert.SerializeObject(income),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var rIncome = JsonConvert.DeserializeObject<IncomeAndExpeneses>(r);
+                return rIncome;
+            }
+            return null;
+        }
+        [HttpPost]
+        public IncomeAndExpeneses AddExpense(IncomeAndExpeneses expense)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Expenses/",
+                JsonConvert.SerializeObject(expense),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var rExpense = JsonConvert.DeserializeObject<IncomeAndExpeneses>(r);
+                return rExpense;
+            }
+            return null;
+        }
     }
 }

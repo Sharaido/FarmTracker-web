@@ -113,73 +113,21 @@
             </li>
         </ul>
         <hr>
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-success" onclick="addIncomeOrExpensePopup(true)">Add Income</button>
+                <button type="button" class="btn btn-success" onclick="addIncomeOrExpensePopup(false)">Add Expense</button>
+            </div>
+        </div>
+        <br>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-allIE" role="tabpanel" aria-labelledby="pills-allIE-tab">
-                <div class="row">
-                    <div class="col-12">
-                        <button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">
-                            Add Income
-                        </button>
-                        <button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">
-                            Add Expense
-                        </button>
-                    </div>
-                </div>
-                <br>
-                <div class="list-group" id="incomeAndExpensesContainer">
-                    
-                </div>
+                <div class="list-group" id="incomeAndExpensesContainer"></div>
             </div>
             <div class="tab-pane fade" id="pills-expenses" role="tabpanel" aria-labelledby="pills-all-expenses">
-                <div class="row">
-                    <div class="col-12">
-                        <button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">
-                            Add Income
-                        </button>
-                        <button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">
-                            Add Expense
-                        </button>
-                    </div>
-                </div>
-                <br>
                 <div class="list-group" id="incomesContainer"></div>
             </div>
             <div class="tab-pane fade" id="pills-incomes" role="tabpanel" aria-labelledby="pills-all-incomes">
-                <div class="row">
-                    <div class="col-12">
-                        <button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">
-                            Add Income
-                        </button>
-                        <button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">
-                            Add Expense
-                        </button>
-                    </div>
-                </div>
-                <br>
                 <div class="list-group" id="expensesContainer"></div>
             </div>
         </div>

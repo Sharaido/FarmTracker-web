@@ -489,7 +489,6 @@ function printIncomeAndExpenses(incomeAndExpenses) {
     ieBody = ""
     iBody = ""
     eBody = ""
-    debugger
     
     if (incomeAndExpenses) {
         for (var iae of incomeAndExpenses) {
@@ -527,3 +526,137 @@ function printIncomeAndExpenses(incomeAndExpenses) {
     $('#expensesContainer').html(eBody)
 }
 /* Get Income and Expenses END */
+/* Add Income and Expense */
+function addIncomeOrExpensePopup(incomeFlag) {
+    var formBody = `
+    <div class="container">
+        <form id="addIncomeOrExpenseForm" method="POST">
+            <div class="form-group">
+                <label for="Head">Head</label>
+                <input type="text" id="Head" name="Head" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Description</label>
+                <textarea id="Description" name="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="">Date</label>
+                <input type="date" id="Date" name="Date" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Cost</label>
+                <input type="number" id="Cost" name="Cost" class="form-control">
+            </div>
+            <input type="hidden" id="FUID" name="FUID" value="${window.location.href.toString().split('/').pop()}">
+        </form>
+    </div>`
+
+    var popupTitle = ""
+    if (incomeFlag) {
+        popupTitle += `<label for="Head">Add Income</label>`
+    } else {
+        popupTitle += `<label for="Head">Add Expense</label>`
+    }  
+
+    addIncomeOrExpenseFormPopup = dkPopup({
+        title: popupTitle,
+        type: 'confirm',
+        confirmClick: function () {
+            submitAddIncomeOrExpenseForm(incomeFlag)
+        },
+        content: formBody
+    })
+    addIncomeOrExpenseFormValidations()
+}
+function addIncomeOrExpenseFormValidations() {
+    $("#addIncomeOrExpenseForm").validate({
+        onsubmit: false,
+        errorClass: "clr-danger",
+        rules: {
+            Head: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 255
+            },
+            Cost: {
+                required: true,
+            },
+            FUID: {
+                required: true,
+            }
+
+        }
+    });
+}
+function submitAddIncomeOrExpenseForm(incomeFlag) {
+    if (!$("#addIncomeOrExpenseForm").valid()) {
+        return;
+    }
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($("#addIncomeOrExpenseForm"))
+    var ajaxUrl = ""
+    if (incomeFlag) {
+        ajaxUrl = "/Farms/AddIncome"
+    } else {
+        ajaxUrl = "/Farms/AddExpense"
+    }
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl,
+        data: $('#addIncomeOrExpenseForm').serialize(),
+        success: function (ioe) {
+            if (ioe) {
+                addIncomeOrExpenseFormPopup.closeDkPop();
+                printIncomeOrExpense(ioe)
+            } else {
+                alert("IncomeOrExpense could not be inserted#1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("IncomeOrExpense could not be inserted#2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+function printIncomeOrExpense(ioe) {
+    var iaeEl = $('#incomeAndExpensesContainer')
+    var iEl = $('#incomesContainer')
+    var eEl = $('#expensesContainer')
+
+    var body = `<a href="tree1.html" class="list-group-item list-group-item-action d-flex align-items-center" style="color: #495057; font-weight: normal;">`
+    if (ioe.incomeFlag) {
+        body += `<span class="badge badge-primary badge-pill">${ioe.cost}</span>`
+    } else {
+        body += `<span class="badge badge-danger badge-pill">${ioe.cost}</span>`
+    }
+    body += `${ioe.head}
+                </a>`
+
+    if (iaeEl.hasClass('null-content')) {
+        iaeEl.removeClass('null-content')
+        iaeEl.html("")
+    }
+    iaeEl.prepend(body)
+    if (ioe.incomeFlag) {
+        if (iEl.hasClass('null-content')) {
+            iEl.removeClass('null-content')
+            iEl.html("")
+        }
+        iEl.prepend(body)
+    } else {
+        if (eEl.hasClass('null-content')) {
+            eEl.removeClass('null-content')
+            eEl.html("")
+        }
+        eEl.prepend(body)
+    }
+
+}
+/* Add Income and Expense END */
