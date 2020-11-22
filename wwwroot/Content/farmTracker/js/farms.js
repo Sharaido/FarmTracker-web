@@ -468,3 +468,62 @@ function printEntity(entity) {
 }
 
 /* Add FP Entity END */
+/* Get Income and Expenses */
+$(document).ready(function () {
+    if ($('#incomeAndExpensesContainer').length > 0) {
+        var FUID = window.location.href.toString().split("/").pop()
+        $.ajax({
+            type: "GET",
+            url: "/Farms/IncomeAndExpeneses/" + FUID,
+            success: function (incomeAndExpenses) {
+                printIncomeAndExpenses(incomeAndExpenses)
+            },
+            error: function () {
+                alert("IncomeAndExpenses could not be received")
+            }
+        })
+    }
+})
+
+function printIncomeAndExpenses(incomeAndExpenses) {
+    ieBody = ""
+    iBody = ""
+    eBody = ""
+    debugger
+    
+    if (incomeAndExpenses) {
+        for (var iae of incomeAndExpenses) {
+            var body = `<a href="tree1.html" class="list-group-item list-group-item-action d-flex align-items-center" style="color: #495057; font-weight: normal;">`
+            if (iae.incomeFlag) {
+                body += `<span class="badge badge-primary badge-pill">${iae.cost}</span>`
+            } else {
+                body += `<span class="badge badge-danger badge-pill">${iae.cost}</span>`
+            }
+            body +=         `${iae.head}
+                        </a>`
+
+            ieBody += body
+            if (iae.incomeFlag)
+                iBody += body
+            else
+                eBody += body
+        }
+    }
+    if (!ieBody) {
+        ieBody = "<h1>This farm have not any income or expense!</h1>"
+        $('#incomeAndExpensesContainer').addClass('null-content')
+    }
+    if (!iBody) {
+        iBody = "<h1>This farm have not any income!</h1>"
+        $('#incomesContainer').addClass('null-content')
+    }
+    if (!eBody) {
+        eBody = "<h1>This farm have not any expense!</h1>"
+        $('#expensesContainer').addClass('null-content')
+    }
+
+    $('#incomeAndExpensesContainer').html(ieBody)
+    $('#incomesContainer').html(iBody)
+    $('#expensesContainer').html(eBody)
+}
+/* Get Income and Expenses END */

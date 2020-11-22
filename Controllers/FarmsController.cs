@@ -292,5 +292,21 @@ namespace FarmTracker_web.Controllers
                 return NotFound();
             }
         }
+        [HttpGet("[controller]/IncomeAndExpeneses/{FUID}")]
+        public IEnumerable<IncomeAndExpeneses> GetIncomeAndExpeneses(string FUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/IncomeAndExpenses/" + FUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var incomeAndExpeneses = JsonConvert.DeserializeObject<IEnumerable<IncomeAndExpeneses>>(r);
+                return incomeAndExpeneses;
+            }
+            return null;
+        }
     }
 }
