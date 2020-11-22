@@ -126,6 +126,22 @@ namespace FarmTracker_web.Controllers
                 return NotFound();
             }
         }
+        [HttpPost]
+        public FarmProperties AddFarmProperty(FarmProperties farmProperty)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/",
+                JsonConvert.SerializeObject(farmProperty),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var rFarmProperty = JsonConvert.DeserializeObject<FarmProperties>(r);
+                return rFarmProperty;
+            }
+            return null;
+        }
 
         [HttpGet("[controller]/GetFPEntities/{PUID}")]
         public IEnumerable<EntityOfFp> GetFPEntities(string PUID)
