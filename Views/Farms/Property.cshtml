@@ -10,10 +10,13 @@
 </nav>
 <hr>
 <div class="row">
-    <div class="col-10">
+    <div class="col-8">
         <div class="form-group">
             <input type="text" class="form-control" id="" placeholder="Search Plant, Tree...">
         </div>
+    </div>
+    <div class="col-2" style="text-align: right;">
+        <button type="button" class="btn btn-danger" onclick="deleteFarmPropertyPopup('@Model.Name')">Delete Property</button>
     </div>
     <div class="col-2" style="text-align: right;">
         <button type="button" class="btn btn-success" onclick="addFPEntityPopup()">New Entity</button>

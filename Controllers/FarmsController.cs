@@ -97,6 +97,21 @@ namespace FarmTracker_web.Controllers
             }
             return null;
         }
+        [HttpDelete("[controller]/{FUID}")]
+        public bool DeleteFarm(string FUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/" + FUID,
+                "",
+                HttpMethod.Delete,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                return JsonConvert.DeserializeObject<bool>(r);
+            }
+            return false;
+        }
 
         [HttpGet("[controller]/{FUID}/{PUID}")]
         public IActionResult Property(string FUID, string PUID)
@@ -141,6 +156,21 @@ namespace FarmTracker_web.Controllers
                 return rFarmProperty;
             }
             return null;
+        }
+        [HttpDelete("[controller]/Properties/{PUID}")]
+        public bool DeleteFarmProperty(string PUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/" + PUID,
+                "",
+                HttpMethod.Delete,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                return JsonConvert.DeserializeObject<bool>(r);
+            }
+            return false;
         }
 
         [HttpGet("[controller]/GetFPEntities/{PUID}")]
@@ -203,6 +233,21 @@ namespace FarmTracker_web.Controllers
                 return rEntity;
             }
             return null;
+        }
+        [HttpDelete("[controller]/Properties/Entities/{EUID}")]
+        public bool DeleteFPEntity(string EUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/" + EUID,
+                "",
+                HttpMethod.Delete,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                return JsonConvert.DeserializeObject<bool>(r);
+            }
+            return false;
         }
         private void AddCOPValue(EntityCopvalues value)
         {
@@ -323,6 +368,21 @@ namespace FarmTracker_web.Controllers
                 return rIncome;
             }
             return null;
+        }
+        [HttpDelete("[controller]/IAE/{IEUID}")]
+        public bool DeleteIncomeAndExpenses(string IEUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/IncomeAndExpenses/" + IEUID,
+                "",
+                HttpMethod.Delete,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                return JsonConvert.DeserializeObject<bool>(r);
+            }
+            return false;
         }
         [HttpPost]
         public IncomeAndExpeneses AddExpense(IncomeAndExpeneses expense)

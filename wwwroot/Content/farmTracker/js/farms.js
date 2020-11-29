@@ -81,8 +81,10 @@ function printEntities(entities) {
         }
     }
 
-    if (!allEntitiesBody)
+    if (!allEntitiesBody) {
         allEntitiesBody = "<h1>This property have not any entity!</h1>"
+        $('#entities').addClass("null-content")
+    }
 
     $('#entities').html(allEntitiesBody)
 }
@@ -464,6 +466,10 @@ function printEntity(entity) {
     if (!body)
         body = "<h1>This property have not any entity!</h1>"
 
+    if ($('#entities').hasClass('null-content')) {
+        $('#entities').removeClass('null-content')
+        $('#entities').html("")
+    }
     $('#entities').prepend(body)
 }
 
@@ -492,14 +498,16 @@ function printIncomeAndExpenses(incomeAndExpenses) {
     
     if (incomeAndExpenses) {
         for (var iae of incomeAndExpenses) {
-            var body = `<a href="tree1.html" class="list-group-item list-group-item-action d-flex align-items-center" style="color: #495057; font-weight: normal;">`
+            var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;"><a href="javascript:;">`
             if (iae.incomeFlag) {
-                body += `<span class="badge badge-primary badge-pill">${iae.cost}</span>`
+                body +=     `<span class="badge badge-primary badge-pill">${iae.cost}</span>`
             } else {
-                body += `<span class="badge badge-danger badge-pill">${iae.cost}</span>`
+                body +=     `<span class="badge badge-danger badge-pill">${iae.cost}</span>`
             }
             body +=         `${iae.head}
-                        </a>`
+                            </a>
+                            <a href="javascript:deleteIAEPopup('${iae.head}', '${iae.ieuid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
+                        </div>`
 
             ieBody += body
             if (iae.incomeFlag)
@@ -630,14 +638,16 @@ function printIncomeOrExpense(ioe) {
     var iEl = $('#incomesContainer')
     var eEl = $('#expensesContainer')
 
-    var body = `<a href="tree1.html" class="list-group-item list-group-item-action d-flex align-items-center" style="color: #495057; font-weight: normal;">`
+    var body =  `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;"><a href="javascript:;">`
     if (ioe.incomeFlag) {
-        body += `<span class="badge badge-primary badge-pill">${ioe.cost}</span>`
+        body +=     `<span class="badge badge-primary badge-pill">${ioe.cost}</span>`
     } else {
-        body += `<span class="badge badge-danger badge-pill">${ioe.cost}</span>`
+        body +=     `<span class="badge badge-danger badge-pill">${ioe.cost}</span>`
     }
-    body += `${ioe.head}
-                </a>`
+    body +=         `${ioe.head}
+                    </a>
+                    <a href="javascript:deleteIAEPopup('${ioe.head}', '${ioe.ieuid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
+                </div>`
 
     if (iaeEl.hasClass('null-content')) {
         iaeEl.removeClass('null-content')
@@ -660,3 +670,154 @@ function printIncomeOrExpense(ioe) {
 
 }
 /* Add Income and Expense END */
+/* Delete Farm */
+function deleteFarmPopup(name) {
+    deleteFarmPopupEl = dkPopup({
+        model: 'simple-confirm',
+        title: 'Delete Farm',
+        type: 'confirm',
+        confirmClick: function () {
+            deleteFarm(window.location.href.toString().split("/").pop())
+        },
+        content: `Do you want to delete ${name}`
+    })
+}
+function deleteFarm(FUID) {
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "DELETE",
+        url: "/Farms/" + FUID,
+        success: function (result) {
+            if (result) {
+                window.location.href = "http://" + location.hostname + ":" + location.port
+            } else {
+                alert("Farm could not be deleted #1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("Farm could not be deleted #2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+/* Delete Farm END */
+/* Delete Farm Property */
+function deleteFarmPropertyPopup(name) {
+    deleteFarmPropertyPopupEl = dkPopup({
+        model: 'simple-confirm',
+        title: 'Delete Farm Property',
+        type: 'confirm',
+        confirmClick: function () {
+            deleteFarmProperty(window.location.href.toString().split("/").pop())
+        },
+        content: `Do you want to delete ${name}`
+    })
+}
+function deleteFarmProperty(PUID) {
+    var arr = window.location.href.toString().split("/")
+    arr.pop()
+    var FUID = arr.pop()
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "DELETE",
+        url: "/Farms/Properties/" + PUID,
+        success: function (result) {
+            if (result) {
+                window.location.href = "http://" + location.hostname + ":" + location.port + "/Farms/" + FUID
+            } else {
+                alert("Farm property could not be deleted #1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("Farm property could not be deleted #2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+/* Delete Farm Property END */
+/* Delete FP Entity */
+function deleteFPEntityPopup(name) {
+    deleteFPEntityPopupEl = dkPopup({
+        model: 'simple-confirm',
+        title: 'Delete Entity',
+        type: 'confirm',
+        confirmClick: function () {
+            deleteFPEntity(window.location.href.toString().split("/").pop())
+        },
+        content: `Do you want to delete ${name}`
+    })
+}
+function deleteFPEntity(EUID) {
+    var arr = window.location.href.toString().split("/")
+    arr.pop()
+    var PUID = arr.pop()
+    var FUID = arr.pop()
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "DELETE",
+        url: "/Farms/Properties/Entities/" + EUID,
+        success: function (result) {
+            if (result) {
+                window.location.href = "http://" + location.hostname + ":" + location.port + "/Farms/" + FUID + "/" + PUID
+            } else {
+                alert("FPEntity could not be deleted #1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("FPEntity could not be deleted #2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+/* Delete FP Entity END */
+/* Delete IncomeAndExpenses */
+function deleteIAEPopup(name, IEUID) {
+    deleteIAEPopupEl = dkPopup({
+        model: 'simple-confirm',
+        title: 'Delete Income Or Expense',
+        type: 'confirm',
+        confirmClick: function () {
+            deleteIAE(IEUID)
+        },
+        content: `Do you want to delete ${name}`
+    })
+}
+function deleteIAE(IEUID) {
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "DELETE",
+        url: "/Farms/IAE/" + IEUID,
+        success: function (result) {
+            if (result) {
+                window.location.reload()
+            } else {
+                alert("Income Or Expense could not be deleted #1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("Income Or Expense could not be deleted #2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+/* Delete FP Entity END */

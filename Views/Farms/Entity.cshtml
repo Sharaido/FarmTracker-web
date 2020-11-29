@@ -27,6 +27,7 @@
         <i class="fa fa-plus"></i> Pesticide
     </button>
     <button class="btn btn-success"><i class="fa fa-plus"></i> Remainder</button>
+    <button type="button" class="btn btn-danger" onclick="deleteFPEntityPopup('@Model.Name')">Delete Entity</button>
 </div>
 <hr>
 <div class="form-gruop">
@@ -82,3 +83,7 @@
         <option>Lorem, ipsum dolor.</option>
     </select>
 </div>
+
+@section Scripts{
+    <script src="~/Content/farmTracker/js/farms.js"></script>
+}
