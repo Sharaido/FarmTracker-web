@@ -342,6 +342,14 @@ namespace FarmTracker_web.Controllers
         [HttpPost("[controller]/EntityDetails/")]
         public EntityDetails AddEntityDetails(EntityDetails detail)
         {
+            if (detail.RDate != null && detail.RTime != null)
+            {
+                var date = DateTime.MinValue;
+                if (DateTime.TryParse($"{detail.RDate}T{detail.RTime}", out date))
+                {
+                    detail.RemainderDate = date;
+                }
+            }
             var r = StaticFunctions.Request(
                 "Farms/Properties/Entities/Details/",
                 JsonConvert.SerializeObject(detail),

@@ -11,6 +11,8 @@ namespace FarmTracker_web.Models.Farms
         public string Description { get; set; }
         public decimal? Cost { get; set; }
         public DateTime? RemainderDate { get; set; }
+        public string RDate { get; set; }
+        public string RTime { get; set; }
         public bool? RemainderCompletedFlag { get; set; }
         public DateTime? RemainderCompletedDate { get; set; }
         public Guid? RemainderCompletedByUuid { get; set; }
