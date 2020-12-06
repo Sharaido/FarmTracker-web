@@ -32,7 +32,7 @@ namespace FarmTracker_web.Controllers
         public SignInResponse SignIn(SignInRequest signInRequest)
         {
             var body = JsonConvert.SerializeObject(signInRequest);
-            var response = StaticFunctions.Request("Members/SignIn", body, HttpMethod.Get);
+            var response = StaticFunctions.Request("Members/SignIn", body, HttpMethod.Post);
             SignInResponse signInResponse = JsonConvert.DeserializeObject<SignInResponse>(response);
 
             if (signInResponse.Result)
