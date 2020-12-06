@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/bootstrap-4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <form id="addFPEntityForm" method="POST">
+            <div class="form-group mb-0">
+                <label for="">Category</label>
+                <div id="categorySelects" class="row">
+                    <div class="col-sm-4 mb-3">
+                        <select name="Category1" id="Category1" class="form-control">
+                            <option value=""></option>
+                            <option value="1">Cat1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <select name="Category1" id="Category1" class="form-control">
+                            <option value=""></option>
+                            <option value="1">Cat1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <select name="Category1" id="Category1" class="form-control">
+                            <option value=""></option>
+                            <option value="1">Cat1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <select name="Category1" id="Category1" class="form-control">
+                            <option value=""></option>
+                            <option value="1">Cat1</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <select name="Category1" id="Category1" class="form-control">
+                            <option value=""></option>
+                            <option value="1">Cat1</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">Entity ID</label>
+                <input type="text" id="Id" name="Id" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Entity Name</label>
+                <input type="text" id="Name" name="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Description</label>
+                <textarea id="Description" name="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="">Count</label>
+                <input type="number" id="Count" name="Count" class="form-control" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label for="">Purchased Date</label>
+                <input type="date" id="PurchasedDate" name="PurchasedDate" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Cost</label>
+                <input type="number" id="Cost" name="Cost" class="form-control" min="0" value="0">
+            </div>
+            <div id="categoryProperties">
+                <div class="form-group">
+                    <label for="">Birth Date</label>
+                    <input type="date" id="CP-1" name="CP-1" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Height</label>
+                    <input type="number" id="CP-2" name="CP-2" class="form-control">
+                </div>
+                </div>
+                <div class="form-group">
+                    <label for="">Height</label>
+                    <select name="CP-3" id="CP-3" class="form-control">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" id="PUID" name="PUID" value="">
+            <input type="hidden" id="CUID" name="CUID" value="">
+        </form>
+    </div>
+
+    <script src="../assets/jquery/jquery-3.4.1.min.js"></script>
+    <script src="../assets/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

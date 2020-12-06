@@ -4,9 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using FarmTracker_services.Models.DB;
 using FarmTracker_web.Models;
-using FarmTracker_web.Models.DB;
 using FarmTracker_web.Models.Members;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -34,7 +32,7 @@ namespace FarmTracker_web.Controllers
         public SignInResponse SignIn(SignInRequest signInRequest)
         {
             var body = JsonConvert.SerializeObject(signInRequest);
-            var response = StaticFunctions.Request("Members/SignIn", body, HttpMethod.Get);
+            var response = StaticFunctions.Request("Members/SignIn", body, HttpMethod.Post);
             SignInResponse signInResponse = JsonConvert.DeserializeObject<SignInResponse>(response);
 
             if (signInResponse.Result)
@@ -142,7 +140,7 @@ namespace FarmTracker_web.Controllers
             }
             else
             {
-                if (Cookies.User.s != null && Cookies.User.ui != null)
+                if (Cookies.User != null && Cookies.User.s != null && Cookies.User.ui != null)
                 {
                     if (AuthenticateFromCookies())
                     {

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/bootstrap-4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <form id="addEntityDetail" method="POST">
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" id="Name" name="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea id="Description" name="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="Cost">Cost</label>
+                <input type="number" id="Cost" name="Cost" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="ExpenseFlag"><input type="checkbox" id="Cost" name="Cost" checked> Add expenses</label>
+            </div>
+            <div class="form-group">
+                <label for="RDate">Remainder Date</label>
+                <input type="date" id="RDate" name="RDate" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="RTime">Remainder Date</label>
+                <input type="time" id="RTime" name="RTime" class="form-control">
+            </div>
+            <input type="hidden" id="EUID" name="EUID" value="">
+        </form>
+    </div>
+
+    <script src="../assets/jquery/jquery-3.4.1.min.js"></script>
+    <script src="../assets/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
