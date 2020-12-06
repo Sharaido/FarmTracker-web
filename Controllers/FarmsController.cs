@@ -339,6 +339,32 @@ namespace FarmTracker_web.Controllers
             }
             return null;
         }
+        [HttpPost("[controller]/EntityDetails/")]
+        public EntityDetails AddEntityDetails(EntityDetails detail)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/Details/",
+                JsonConvert.SerializeObject(detail),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (detail.ExpenseFlag && detail.Cost != null && detail.Cost != 0)
+            {
+                var r2 = AddExpense(new IncomeAndExpeneses { 
+                    Fuid = new Guid(Sessions.CurrentFarmUID), 
+                    Cost = (decimal)detail.Cost, 
+                    Date = DateTime.Now,
+                    Head = detail.Name,
+                    Description = detail.Description
+                });
+            }
+            if (r != null)
+            {
+                var _detail = JsonConvert.DeserializeObject<EntityDetails>(r);
+                return _detail;
+            }
+            return null;
+        }
 
         [HttpGet("[controller]/{FUID}/{PUID}/{EUID}")]
         public IActionResult Entity(string FUID, string PUID, string EUID)

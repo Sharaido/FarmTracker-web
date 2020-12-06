@@ -866,9 +866,7 @@ function getEntityDetails(EUID) {
         type: "GET",
         url: "/Farms/EntityDetails/" + EUID,
         success: function (values) {
-            if (values) {
-                printEntityDetails(values)
-            } 
+            printEntityDetails(values)
         },
         error: function () {
             alert("EntityDetails could not be received #2")
@@ -876,31 +874,148 @@ function getEntityDetails(EUID) {
     })
 }
 function printEntityDetails(values) {
-    for (detail of values) {
-        var popoverBody = `${detail.description}`
-        if (detail.cost) {
-            popoverBody += `${detail.description} <br/> <b>Cost: </b> ${detail.cost}`
-        }
-        if (detail.remainderDate) {
-            popoverBody += `${detail.description} <br/> <b>Remainer Date : </b> ${detail.remainderDate.replace('T', ' ')}`
-            if (detail.remainderCompletedFlag) {
-                popoverBody += `<br/> <b>Completed Date: </b>${detail.remainderCompletedDate.replace('T', ' ')}`
+    var body = ''
+    if (values) {
+        for (detail of values) {
+            var popoverBody = `${detail.description}`
+            if (detail.cost) {
+                popoverBody += `${detail.description} <br/> <b>Cost: </b> ${detail.cost}`
             }
-        }
-        var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal; cursor:default"
+            if (detail.remainderDate) {
+                popoverBody += `${detail.description} <br/> <b>Remainer Date : </b> ${detail.remainderDate.replace('T', ' ')}`
+                if (detail.remainderCompletedFlag) {
+                    popoverBody += `<br/> <b>Completed Date: </b>${detail.remainderCompletedDate.replace('T', ' ')}`
+                }
+            }
+            body += `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal; cursor:default"
                         data-toggle="popover" data-html="true" data-trigger="hover" title="${detail.name}" data-content="${popoverBody}" >`
-        if (detail.remainderDate) {
-            if (detail.remainderCompletedFlag) {
-                body += `<span class="badge badge-success badge-pill">${detail.remainderCompletedDate.replace('T', ' ')}</span>`
-            } else {
-                body += `<span class="badge badge-primary badge-pill">${detail.remainderDate.replace('T', ' ')}</span>`
+            if (detail.remainderDate) {
+                if (detail.remainderCompletedFlag) {
+                    body += `<span class="badge badge-success badge-pill">${detail.remainderCompletedDate.replace('T', ' ')}</span>`
+                } else {
+                    body += `<span class="badge badge-primary badge-pill">${detail.remainderDate.replace('T', ' ')}</span>`
+                }
             }
-        }
-        body += `${detail.name}
+            body += `${detail.name}
                 </div>`
-
-        $("#entityDetails").append(body)
+        }
     }
+    if (!body) {
+        body = "<h3>This entity have not any detail!</h3>"
+        $('#entityDetails').addClass('null-content')
+    }
+
+    $("#entityDetails").html(body)
     $('[data-toggle="popover"]').popover()
 }
 /* FP Entity Details END */
+/* Add Entity Details */
+function addEntityDetailPopup() {
+    var formBody = `
+    <div class="container">
+        <form id="addEntityDetailForm" method="POST">
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" id="Name" name="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea id="Description" name="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="Cost">Cost</label>
+                <input type="number" id="Cost" name="Cost" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="ExpenseFlag"><input type="checkbox" id="ExpenseFlag" name="ExpenseFlag" value="true" checked> Add expenses</label>
+            </div>
+            <input type="hidden" id="EUID" name="EUID" value="${$('#hiddenEUID').val()}">
+        </form>
+    </div>`
+    addEntityDetailPopupEl = dkPopup({
+        title: 'Add Entity Detail',
+        type: 'confirm',
+        confirmClick: function () {
+            submitAddEntityDetailForm()
+        },
+        content: formBody
+    })
+    addAddEntityDetailFormValidations()
+}
+function addAddEntityDetailFormValidations() {
+    $("#addEntityDetailForm").validate({
+        onsubmit: false,
+        errorClass: "clr-danger",
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 255
+            }
+        }
+    });
+}
+function submitAddEntityDetailForm() {
+    if (!$("#addEntityDetailForm").valid()) {
+        return;
+    }
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($("#addEntityDetailForm"))
+    $.ajax({
+        type: "POST",
+        url: "/Farms/EntityDetails",
+        data: $('#addEntityDetailForm').serialize(),
+        success: function (detail) {
+            if (detail) {
+                addEntityDetailPopupEl.closeDkPop();
+                printEntityDetail(detail)
+                removeLoading()
+            } else {
+                alert("Entity detail could not be inserted#1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("Entity detail not be inserted#2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+function printEntityDetail(detail) {
+    var popoverBody = `${detail.description}`
+    if (detail.cost) {
+        popoverBody += `${detail.description} <br/> <b>Cost: </b> ${detail.cost}`
+    }
+    if (detail.remainderDate) {
+        popoverBody += `${detail.description} <br/> <b>Remainer Date : </b> ${detail.remainderDate.replace('T', ' ')}`
+        if (detail.remainderCompletedFlag) {
+            popoverBody += `<br/> <b>Completed Date: </b>${detail.remainderCompletedDate.replace('T', ' ')}`
+        }
+    }
+    body += `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal; cursor:default"
+                        data-toggle="popover" data-html="true" data-trigger="hover" title="${detail.name}" data-content="${popoverBody}" >`
+    if (detail.remainderDate) {
+        if (detail.remainderCompletedFlag) {
+            body += `<span class="badge badge-success badge-pill">${detail.remainderCompletedDate.replace('T', ' ')}</span>`
+        } else {
+            body += `<span class="badge badge-primary badge-pill">${detail.remainderDate.replace('T', ' ')}</span>`
+        }
+    }
+    body += `${detail.name}
+                </div>`
+
+    var containerEl = $('#entityDetails')
+    if (containerEl.hasClass('null-content')) {
+        containerEl.removeClass('null-content')
+        containerEl.html("")
+    }
+    containerEl.prepend(body)
+}
+
+/* Add Entity Details END */

@@ -12,13 +12,7 @@
 </nav>
 <div class="form-group">
     <button class="btn btn-primary">Update</button>
-    <button class="btn btn-info" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form2.html',
-                            title: 'Iframe Popup'
-                        })">
-        <i class="fa fa-plus"></i> Detail
-    </button>
+    <button class="btn btn-info" onclick="addEntityDetailPopup()"><i class="fa fa-plus"></i> Detail</button>
     <button class="btn btn-success"><i class="fa fa-plus"></i> Remainder</button>
     <button type="button" class="btn btn-danger" onclick="deleteFPEntityPopup('@Model.Name')">Delete Entity</button>
 </div>
@@ -72,7 +66,9 @@
     </div>
     <div class="col-sm-6">
         <h1 data-toggle="tooltip" data-placement="top" title="Tooltip on top">Entity Details</h1>
-        <div id="entityDetails"></div>
+        <div id="entityDetails">
+            <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+        </div>
     </div>
 </div>
 
