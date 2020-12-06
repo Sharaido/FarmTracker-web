@@ -307,6 +307,38 @@ namespace FarmTracker_web.Controllers
             }
             return null;
         }
+        [HttpGet("[controller]/EntityCOPValues/{EUID}")]
+        public IEnumerable<EntityCopvalues> GetEntityCOPValues(string EUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/COPValues/" + EUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var values = JsonConvert.DeserializeObject<IEnumerable<EntityCopvalues>>(r);
+                return values;
+            }
+            return null;
+        }
+        [HttpGet("[controller]/EntityDetails/{EUID}")]
+        public IEnumerable<EntityDetails> GetEntityDetails(string EUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/Details/" + EUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var values = JsonConvert.DeserializeObject<IEnumerable<EntityDetails>>(r);
+                return values;
+            }
+            return null;
+        }
 
         [HttpGet("[controller]/{FUID}/{PUID}/{EUID}")]
         public IActionResult Entity(string FUID, string PUID, string EUID)

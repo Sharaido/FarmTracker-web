@@ -335,6 +335,9 @@ function getCategoryProperties(CUID) {
         success: function (cProperties) {
             if (cProperties) {
                 printCategoryPropertiesInputs(cProperties)
+                if ($("#hiddenEUID").length > 0) {
+                    getEntityCPValues($("#hiddenEUID").val())
+                }
             } else {
                 alert("Category properties could not be received #1")
             }
@@ -821,3 +824,83 @@ function deleteIAE(IEUID) {
     })
 }
 /* Delete FP Entity END */
+/* FP Entity Details */
+
+$(document).ready(function () {
+    if ($("#categoryProperties").length > 0) {
+        getCategoryProperties($("#hiddenCUID").val())
+    }
+})
+function getEntityCPValues(EUID) {
+    $.ajax({
+        type: "GET",
+        url: "/Farms/EntityCOPValues/" + EUID,
+        success: function (values) {
+            if (values) {
+                printEntityCPValues(values)
+            } else {
+                
+            }
+        },
+        error: function () {
+            alert("EntityCOPValues could not be received #2")
+        }
+    })
+}
+function printEntityCPValues(values) {
+    for (value of values) {
+        $('#CP_' + value.puid).val(value.value)
+    }
+}
+
+
+
+$(document).ready(function () {
+    if ($("#entityDetails").length > 0) {
+        getEntityDetails($("#hiddenEUID").val())
+    }
+})
+
+function getEntityDetails(EUID) {
+    $.ajax({
+        type: "GET",
+        url: "/Farms/EntityDetails/" + EUID,
+        success: function (values) {
+            if (values) {
+                printEntityDetails(values)
+            } 
+        },
+        error: function () {
+            alert("EntityDetails could not be received #2")
+        }
+    })
+}
+function printEntityDetails(values) {
+    for (detail of values) {
+        var popoverBody = `${detail.description}`
+        if (detail.cost) {
+            popoverBody += `${detail.description} <br/> <b>Cost: </b> ${detail.cost}`
+        }
+        if (detail.remainderDate) {
+            popoverBody += `${detail.description} <br/> <b>Remainer Date : </b> ${detail.remainderDate.replace('T', ' ')}`
+            if (detail.remainderCompletedFlag) {
+                popoverBody += `<br/> <b>Completed Date: </b>${detail.remainderCompletedDate.replace('T', ' ')}`
+            }
+        }
+        var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal; cursor:default"
+                        data-toggle="popover" data-html="true" data-trigger="hover" title="${detail.name}" data-content="${popoverBody}" >`
+        if (detail.remainderDate) {
+            if (detail.remainderCompletedFlag) {
+                body += `<span class="badge badge-success badge-pill">${detail.remainderCompletedDate.replace('T', ' ')}</span>`
+            } else {
+                body += `<span class="badge badge-primary badge-pill">${detail.remainderDate.replace('T', ' ')}</span>`
+            }
+        }
+        body += `${detail.name}
+                </div>`
+
+        $("#entityDetails").append(body)
+    }
+    $('[data-toggle="popover"]').popover()
+}
+/* FP Entity Details END */
