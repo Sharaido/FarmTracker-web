@@ -16,8 +16,10 @@ $(document).ready(function () {
 function printFarmLinks(farms){
     body = `<a href="javascript:;"><i class="fa fa-tractor"></i><span>Farms</span></a>
                 <ul>`
-    for (var farm of farms)
-        body +=     `<li><a href="/Farms/${farm.fuid}">${farm.name}</a></li>`   
+    if (farms) {
+        for (var farm of farms)
+            body += `<li><a href="/Farms/${farm.fuid}">${farm.name}</a></li>`
+    }
     body +=     `<li><a href="javascript:addFarmPopup();">Add Farm</li>`
     body +=   `</ul>`
     $('#farmLinks').html(body)

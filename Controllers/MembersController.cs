@@ -8,6 +8,7 @@ using FarmTracker_web.Models;
 using FarmTracker_web.Models.Members;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -81,6 +82,19 @@ namespace FarmTracker_web.Controllers
 
         private void SignIn(Users user, SignInResponse signInResponse)
         {
+            string memberType;
+            switch (user.Mtuid)
+            {
+                case 1: memberType = "User"; break;
+                case 2: memberType = "Farmer"; break;
+                case 3: memberType = "Advanced"; break;
+                case 4: memberType = "Business"; break;
+                case 5: memberType = "Professional"; break;
+                default: memberType = "Unknown"; break;
+            }
+            string phone = "";
+            if (!String.IsNullOrEmpty(user.PhoneNumber))
+                phone = user.PhoneNumber;
             var claims = new List<Claim>
             {
                 new Claim("Username", user.Username),
@@ -90,6 +104,10 @@ namespace FarmTracker_web.Controllers
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Surname, user.Surname),
                 new Claim(ClaimTypes.Role, user.Ruid.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.MobilePhone, phone),
+                new Claim("MemberTypeName", memberType),
+                new Claim("UUID", user.Uuid.ToString()),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -234,6 +252,42 @@ namespace FarmTracker_web.Controllers
                 );
 
             return JsonConvert.DeserializeObject<bool>(r);
+        }
+        
+        [Authorize]
+        public IActionResult Profile()
+        {
+            Users currUser = GetCurrentUser();
+            return View(currUser);
+        }
+        [HttpPut("[controller]/MemberType")]
+        [Authorize]
+        public Boolean Profile(Users user)
+        {
+            var r = StaticFunctions.Request(
+                "Members/MemberType/",
+                JsonConvert.SerializeObject(user),
+                HttpMethod.Put,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            Boolean _r = JsonConvert.DeserializeObject<Boolean>(r);
+            if (_r)
+            {
+                // change claims
+            }
+            return _r;
+        }
+        private Users GetCurrentUser()
+        {
+            Users currentUser = new Users();
+            currentUser.Username = User.Claims.FirstOrDefault(e => e.Type.Equals("Username")).Value;
+            currentUser.Name = User.FindFirst(ClaimTypes.Name).Value;
+            currentUser.Surname = User.FindFirst(ClaimTypes.Surname).Value;
+            currentUser.Email = User.FindFirst(ClaimTypes.Email).Value;
+            currentUser.PhoneNumber = User.FindFirst(ClaimTypes.MobilePhone).Value;
+            currentUser.MemberTypeName = User.Claims.FirstOrDefault(e => e.Type.Equals("MemberTypeName")).Value;
+            currentUser.Uuid = new Guid(User.Claims.FirstOrDefault(e => e.Type.Equals("UUID")).Value);
+            return currentUser;
         }
     }
 }

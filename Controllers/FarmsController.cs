@@ -56,6 +56,8 @@ namespace FarmTracker_web.Controllers
                 HttpMethod.Get,
                 User.FindFirst(claim => claim.Type == "Token")?.Value
                 );
+            if (r == null)
+                return null;
             var farms = JsonConvert.DeserializeObject<List<Farms>>(r);
 
             return farms;

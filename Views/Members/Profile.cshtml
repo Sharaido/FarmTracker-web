@@ -1,0 +1,52 @@
+﻿@model FarmTracker_web.Models.Members.Users
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="kardoPasso-content">
+    <br />
+    <div class="kardo-profile">
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="profile-pic">
+                    <img src="~/Content/img/userProfilPics/profil_pic.png" alt="" />
+                    <a href="javascript:;">Change Pic</a>
+                </div>
+            </div>
+            <div class="col-sm-10">
+                <div id="pro_userRName">
+                    <label>Name & Surname:</label>
+                    <span>@Model.Name @Model.Surname</span>
+                </div>
+                <div id="pro_username">
+                    <label>Username:</label>
+                    <span>@Model.Username</span>
+                </div>
+                <div id="pro_password">
+                    <label>Password:</label>
+                    <span><a href="javascript:;" class="open-dk-popup" data-id="changePasswordPopup">Change</a></span>
+                </div>
+                <div id="pro_mail">
+                    <label>E-mail:</label>
+                    <span>@Model.Email <i class="fa fa-check"></i></span>
+                </div>
+                <div id="pro_phone">
+                    <label>Telephone:</label>
+                    <span>(+90)@Model.PhoneNumber <i class="fa fa-check"></i></span>
+                </div>
+                <div id="">
+                    <label>Member Type:</label>
+                    <span id="memberType">@Model.MemberTypeName</span>
+                    <a href="javascript:;" onclick="upgradeMembershipPopup('@Model.Uuid')">Upgrade Membership</a>
+                </div>
+                <div id="pro_phone">
+                    <a href="javascript:;" class="open-dk-popup" data-id="updateProfilePopup">Update Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/farmTracker/js/profile.js"></script>
+}

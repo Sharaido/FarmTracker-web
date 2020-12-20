@@ -13,7 +13,7 @@
         <li><a href="/"><i class="fa fa-home"></i><span>Homepage</span></a></li>
         @if (User.Identity.IsAuthenticated)
         {
-            <li><a href="#"><i class="far fa-user"></i><span>Profile</span></a></li>
+            <li><a href="/Members/Profile"><i class="far fa-user"></i><span>Profile</span></a></li>
             <li><a href="#"><i class="fas fa-envelope"></i><span>Messages</span></a></li>
             if (User.FindFirst(claim => claim.Type == "MemberType")?.Value != "1")
             {

@@ -21,5 +21,6 @@ namespace FarmTracker_web.Models.Members
         public Guid? DeletedByUuid { get; set; }
         public int Ruid { get; set; }
         public int Mtuid { get; set; }
+        public string MemberTypeName { get; set; }
     }
 }
