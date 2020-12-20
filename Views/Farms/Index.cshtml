@@ -19,7 +19,7 @@
         <a class="nav-link" id="pills-plant-tab" data-toggle="pill" href="#pills-plant" role="tab" aria-controls="pills-plant" aria-selected="true">Plant Properties</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="pills-collaborators-tab" data-toggle="pill" href="#pills-collaborators" role="tab" aria-controls="pills-collaborators" aria-selected="false">Collaborators</a>
+        <a class="nav-link" id="pills-products-tab" data-toggle="pill" href="#pills-products" role="tab" aria-controls="pills-products" aria-selected="false">Products</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="pills-incomeAndExpenses-tab" data-toggle="pill" href="#pills-incomeAndExpenses" role="tab" aria-controls="pills-incomeAndExpenses" aria-selected="false">Income And Expenses</a>
@@ -87,20 +87,16 @@
             <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
         </div>
     </div>
-    <div class="tab-pane fade" id="pills-collaborators" role="tabpanel" aria-labelledby="pills-collaborators-tab">
+    <div class="tab-pane fade" id="pills-products" role="tabpanel" aria-labelledby="pills-products-tab">
 
         <div class="row">
-            <div class="col-8">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="" placeholder="Search Collaborators">
-                </div>
-            </div>
-            <div class="col-4" style="text-align: right;">
-                <button type="button" class="btn btn-success">New Collaborators</button>
+            <div class="col-12">
+                <button type="button" class="btn btn-success" onclick="addFarmEntityPopup()">New Product</button>
             </div>
         </div>
-        <div class="list-group">
-            <button type="button" class="list-group-item list-group-item-action d-flex align-items-center"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</button>
+        <br />
+        <div class="list-group" id="productsContainer">
+            <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
         </div>
     </div>
     <div class="tab-pane fade" id="pills-incomeAndExpenses" role="tabpanel" aria-labelledby="pills-incomeAndExpenses-tab">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FarmTracker_services.Models.DB;
 using FarmTracker_web.Models;
 using FarmTracker_web.Models.Farms;
 using Microsoft.AspNetCore.Authorization;
@@ -467,6 +468,54 @@ namespace FarmTracker_web.Controllers
                 return rExpense;
             }
             return null;
+        }
+
+        [HttpGet("[controller]/FarmEntities/{FUID}")]
+        public IEnumerable<FarmEntities> GetFarmEntities(string FUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/FarmEntities/" + FUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var entities = JsonConvert.DeserializeObject<IEnumerable<FarmEntities>>(r);
+                return entities;
+            }
+            return null;
+        }
+        [HttpPost("[controller]/FarmEntities/")]
+        public FarmEntities AddFarmEntities(FarmEntities entity)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/FarmEntities/",
+                JsonConvert.SerializeObject(entity),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var _r = JsonConvert.DeserializeObject<FarmEntities>(r);
+                return _r;
+            }
+            return null;
+        }
+        [HttpDelete("[controller]/FarmEntities/{EUID}")]
+        public bool DeleteFarmEntities(string EUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/FarmEntities/" + EUID,
+                "",
+                HttpMethod.Delete,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                return JsonConvert.DeserializeObject<bool>(r);
+            }
+            return false;
         }
     }
 }

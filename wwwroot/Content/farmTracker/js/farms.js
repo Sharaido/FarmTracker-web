@@ -321,7 +321,9 @@ function printAddFPEntityFormSelect(categories) {
             printSubCategories(selectEl.val())
         } else {
             $('#CUID').val(selectEl.val())
-            getCategoryProperties(selectEl.val())
+            if ($('#categoryProperties').length > 0) {
+                getCategoryProperties(selectEl.val())
+            }
             selectEl.addClass("clr-success")
         }
     })
@@ -501,7 +503,7 @@ function printIncomeAndExpenses(incomeAndExpenses) {
     
     if (incomeAndExpenses) {
         for (var iae of incomeAndExpenses) {
-            var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;"><a href="javascript:;">`
+            var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;"  data-iae-id="${iae.ieuid}"><a href="javascript:;">`
             if (iae.incomeFlag) {
                 body +=     `<span class="badge badge-primary badge-pill">${iae.cost}</span>`
             } else {
@@ -641,7 +643,7 @@ function printIncomeOrExpense(ioe) {
     var iEl = $('#incomesContainer')
     var eEl = $('#expensesContainer')
 
-    var body =  `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;"><a href="javascript:;">`
+    var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;" data-iae-id="${ioe.ieuid}"><a href="javascript:;">`
     if (ioe.incomeFlag) {
         body +=     `<span class="badge badge-primary badge-pill">${ioe.cost}</span>`
     } else {
@@ -682,7 +684,7 @@ function deleteFarmPopup(name) {
         confirmClick: function () {
             deleteFarm(window.location.href.toString().split("/").pop())
         },
-        content: `Do you want to delete ${name}`
+        content: `Do you want to delete <strong>${name}</strong>`
     })
 }
 function deleteFarm(FUID) {
@@ -718,7 +720,7 @@ function deleteFarmPropertyPopup(name) {
         confirmClick: function () {
             deleteFarmProperty(window.location.href.toString().split("/").pop())
         },
-        content: `Do you want to delete ${name}`
+        content: `Do you want to delete <strong>${name}</strong>`
     })
 }
 function deleteFarmProperty(PUID) {
@@ -757,7 +759,7 @@ function deleteFPEntityPopup(name) {
         confirmClick: function () {
             deleteFPEntity(window.location.href.toString().split("/").pop())
         },
-        content: `Do you want to delete ${name}`
+        content: `Do you want to delete <strong>${name}</strong>`
     })
 }
 function deleteFPEntity(EUID) {
@@ -797,7 +799,7 @@ function deleteIAEPopup(name, IEUID) {
         confirmClick: function () {
             deleteIAE(IEUID)
         },
-        content: `Do you want to delete ${name}`
+        content: `Do you want to delete <strong>${name}</strong>`
     })
 }
 function deleteIAE(IEUID) {
@@ -809,7 +811,9 @@ function deleteIAE(IEUID) {
         url: "/Farms/IAE/" + IEUID,
         success: function (result) {
             if (result) {
-                window.location.reload()
+                $(`[data-iae-id="${IEUID}"]`).remove()
+                deleteIAEPopupEl.closeDkPop();
+                removeLoading()
             } else {
                 alert("Income Or Expense could not be deleted #1")
                 confirmBtn.removeAttr('disabled').removeClass('disabled')
@@ -1097,3 +1101,132 @@ function submitAddRemainderForm() {
 }
 
 /* Add Entity Remainder END */
+/* Get Farm Entities */
+$(document).ready(function () {
+    if ($('#productsContainer').length > 0) {
+        var FUID = window.location.href.toString().split("/").pop()
+        $.ajax({
+            type: "GET",
+            url: "/Farms/FarmEntities/" + FUID,
+            success: function (entities) {
+                if (entities) {
+                    printFarmEntities(entities)
+                }
+            }
+        })
+    }
+})
+function printFarmEntities(entities) {
+    var body = ""
+    for (i of entities) {
+        body += `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;"  data-farm-entity-id="${i.euid}">
+                    <span class="badge badge-primary badge-pill">${i.count}</span>${i.name}
+                    <a href="javascript:deleteFarmEntityPopup('${i.name}', '${i.euid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
+                </div>`
+    }
+    $('#productsContainer').html(body)
+}
+/* Get Farm Entities END */
+/* Add Farm Entities */
+function addFarmEntityPopup() {
+    var FUID = window.location.href.toString().split("/").pop()
+    var formBody = `
+    <div class="container">
+        <form id="addFarmEntityForm" method="POST">
+            <div class="form-group mb-0">
+                <label for="">Category</label>
+                <div id="categorySelects" class="row"></div>
+            </div>
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" id="Name" name="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="Count">Count</label>
+                <input type="number" id="Count" name="Count" class="form-control" value="1">
+            </div>
+            <input type="hidden" id="FUID" name="FUID" value="${FUID}">
+            <input type="hidden" id="CUID" name="CUID" value="">
+        </form>
+    </div>`
+    dkPopupElAddFarmEntity = dkPopup({
+        title: 'Add Product',
+        type: 'confirm',
+        confirmClick: function () {
+            submitaddFarmEntityForm()
+        },
+        content: formBody
+    })
+    printSubCategories("20")
+}
+function submitaddFarmEntityForm() {
+    if (!$("#CUID").val() || $("#CUID").val() == 0) {
+        $("#addFarmEntityForm").prepend(`<div class="alert alert-danger" role="alert">Complete selecting category</div>`)
+        return;
+    }
+    if (!$('#addFarmEntityForm #Name').val()) {
+        $('#addFarmEntityForm #Name').val($('#addFarmEntityForm [data-endpointflag = "true"]:selected').text())
+    }
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "POST",
+        url: "/Farms/FarmEntities",
+        data: $('#addFarmEntityForm').serialize(),
+        success: function (entity) {
+            if (entity) {
+                dkPopupElAddFarmEntity.closeDkPop();
+                printFarmEntity(entity)
+                removeLoading()
+            } else {
+                alert("Farm entity could not be inserted#1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        }
+    })
+}
+function printFarmEntity(i) {
+    var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;" data-farm-entity-id="${i.euid}">
+                    <span class="badge badge-primary badge-pill">${i.count}</span>${i.name}
+                    <a href="javascript:deleteFarmEntityPopup('${i.name}', '${i.euid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
+                </div>`
+
+    $('#productsContainer').prepend(body)
+}
+/* Add Farm Entities END */
+/* Delete Farm Entities */
+function deleteFarmEntityPopup(name, EUID, e) {
+    dkPopupElDeleteFarmEntity = dkPopup({
+        model: 'simple-confirm',
+        title: 'Delete Farm Entity',
+        type: 'confirm',
+        confirmClick: function () {
+            deleteFarmEntity(EUID)
+        },
+        content: `Do you want to delete <strong>${name}</strong>`
+    })
+}
+function deleteFarmEntity(EUID) {
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "DELETE",
+        url: "/Farms/FarmEntities/" + EUID,
+        success: function (result) {
+            if (result) {
+                $(`[data-farm-entity-id="${EUID}"]`).remove()
+                dkPopupElDeleteFarmEntity.closeDkPop();
+                removeLoading()
+            } else {
+                alert("FarmEntity could not be deleted #1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        }
+    })
+}
+/* Delete Farm Entities END */
+
