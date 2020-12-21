@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FarmTracker_services.Models.DB
+namespace FarmTracker_web.Models.Farms
 {
     public partial class FarmEntities
     {

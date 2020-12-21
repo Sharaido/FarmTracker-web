@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using FarmTracker_web.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace FarmTracker_web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public readonly IHttpContextAccessor _httpContextAccessor;
+        public readonly SessionModel Sessions;
+        public HomeController(IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
+            Sessions = new SessionModel(_httpContextAccessor.HttpContext.Session);
         }
 
         public IActionResult Index()

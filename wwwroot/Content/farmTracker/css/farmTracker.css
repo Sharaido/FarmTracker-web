@@ -71,3 +71,37 @@ body{
     background-color: #404040;
     color: #fff;
 }
+
+
+/* Adds */
+
+.adds-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+.adds-container .adds-item{
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: .8rem;
+    margin: 5px;
+    transition: .3s border-color;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 0.3rem;
+}
+.adds-container .adds-item a{
+    text-decoration: none;
+}
+.adds-container .adds-item:hover{
+    border-color: #404040;
+}
+.adds-container .adds-item img{
+    max-width: 200px;
+    max-height: 150px;
+}
+.adds-container .adds-item h1{
+    font-size: .8rem;
+    margin: 0;
+    padding: 0;
+    color: #404040;
+}

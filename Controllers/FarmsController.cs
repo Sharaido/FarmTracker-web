@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FarmTracker_services.Models.DB;
 using FarmTracker_web.Models;
 using FarmTracker_web.Models.Farms;
 using Microsoft.AspNetCore.Authorization;
