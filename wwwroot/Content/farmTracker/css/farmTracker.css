@@ -1,6 +1,9 @@
 body{
     background-color: #fff;
 }
+.clr-primary{
+    color: #007bff;
+}
 
 /*profile*/
 .kardo-profile{
@@ -104,4 +107,16 @@ body{
     margin: 0;
     padding: 0;
     color: #404040;
+}
+
+/* add details */
+.category-properties label{
+    display: block;
+    border-bottom: dotted 1px #aaaaaa;
+    padding-bottom: .3rem;
+}
+.add-owner{
+    border: 1px solid #aaaaaa;
+    padding: .6rem;
+    text-align: center;
 }

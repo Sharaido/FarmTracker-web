@@ -21,37 +21,10 @@
             }
         });
     }
-
+    if ($("#categoryProperties").length > 0 && $("#hiddenCUID").length > 0 && $("#hiddenCUID").val()) {
+        getCategoryProperties($("#hiddenCUID").val())
+    }
 })
-
-/*$('#postAddFormBtn').click(() => {
-    if (!$("#CUID").val() || $("#CUID").val() == 0) {
-        $("#postAddFormWarn").html(`<div class="alert alert-danger" role="alert">Complete selecting category</div>`)
-        return;
-    }
-    if (!$("#postAddForm").valid()) {
-        return;
-    }
-
-    showLoading($("#postAddForm"))
-    $.ajax({
-        type: "POST",
-        url: "/Adds",
-        data: $('#postAddForm').serialize(),
-        success: function (result) {
-            if (result) {
-                window.location.href = "http://" + location.hostname + ":" + location.port + "/Adds/" + result.fuid
-            } else {
-                alert("Add could not be inserted#1")
-                removeLoading()
-            }
-        },
-        error: function () {
-            alert("Add could not be inserted#2")
-            removeLoading()
-        }
-    })
-})*/
 
 $('#postAddForm').submit(() => {
     if (!$("#CUID").val() || $("#CUID").val() == 0) {
@@ -64,3 +37,49 @@ $('#postAddForm').submit(() => {
     showLoading($("#postAddForm"))
     return true
 })
+
+function getAddCPValues(AUID) {
+    $.ajax({
+        type: "GET",
+        url: "/Adds/AddCOPValues/" + AUID,
+        success: function (values) {
+            if (values) {
+                printAddCPValues(values)
+            }
+        }
+    })
+}
+function printAddCPValues(values) {
+    for (value of values) {
+        if (value.value == "on") {
+            $('#CP_' + value.puid).html("Yes")
+        } else {
+            $('#CP_' + value.puid).html(value.value)
+        }
+        
+    }
+}
+function getCategoryProperties(CUID) {
+    $.ajax({
+        type: "GET",
+        url: "/Farms/CategoryProperties/" + CUID,
+        success: function (cProperties) {
+            if (cProperties) {
+                printCategoryPropertiesInputs(cProperties)
+                if ($("#hiddenAUID").length > 0) {
+                    getAddCPValues($("#hiddenAUID").val())
+                }
+            } else {
+                $('#categoryProperties').html("")
+            }
+        }
+    })
+}
+
+function printCategoryPropertiesInputs(cProperties) {
+    var body = ''
+    for (var property of cProperties) {
+        body += `<label><b>${property.name}: </b><span id="CP_${property.puid}"></span></label>`
+    }
+    $('#categoryProperties').html(body)
+}

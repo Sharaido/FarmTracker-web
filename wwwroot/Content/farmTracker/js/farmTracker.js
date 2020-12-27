@@ -137,7 +137,7 @@ function printAdds(adds) {
         for (add of adds) {
             body += `
         <div class="adds-item">
-            <a href="#">`
+            <a href="/Adds/${add.auid}">`
             if (add.pictures.length > 0) {
                 body += `<img src="Content/farmtracker/img/${add.pictures[0].address}" alt="">`
             } else {

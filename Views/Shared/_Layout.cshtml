@@ -190,9 +190,11 @@
         </div>
         <nav class="dh-h-nav">
             <ul>
-                <li><a href="/">HomePage</a></li>
-                <li><a href="/Adds">Adds</a></li>
-                <li><a href="/Adds/PostAdd">Post Free Add</a></li>
+                <li><a href="/">Homepage</a></li>
+                @if (User.FindFirst(claim => claim.Type == "MemberType")?.Value != "1")
+                {
+                    <li><a href="/Adds/PostAdd">Post Free Add</a></li>
+                }
             </ul>
         </nav>
     </header>

@@ -34,6 +34,22 @@ namespace FarmTracker_web.Controllers
             }
             return null;
         }
+
+        [HttpGet("[controller]/{AUID}")]
+        public IActionResult GetAdd(string AUID)
+        {
+            var r = StaticFunctions.Request(
+                "Adds/" + AUID,
+                "",
+                HttpMethod.Get
+                );
+            if (r != null)
+            {
+                var _r = JsonConvert.DeserializeObject<Adds>(r);
+                return View("AddDetail", _r);
+            }
+            return RedirectToAction("Error", "Home");
+        }
         [HttpGet]
         [Authorize]
         public IActionResult PostAdd()
@@ -135,6 +151,23 @@ namespace FarmTracker_web.Controllers
             file.CopyTo(new FileStream(filePath, FileMode.Create));
 
             return uniqueFileName;
+        }
+
+        [HttpGet("[controller]/AddCOPValues/{AUID}")]
+        public IEnumerable<AddCopvalues> GetEntityCOPValues(string AUID)
+        {
+            var r = StaticFunctions.Request(
+                "Adds/COPValues/" + AUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var values = JsonConvert.DeserializeObject<IEnumerable<AddCopvalues>>(r);
+                return values;
+            }
+            return null;
         }
     }
 }
