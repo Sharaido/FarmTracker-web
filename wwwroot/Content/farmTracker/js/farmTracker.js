@@ -126,7 +126,6 @@ $(document).ready(function () {
             type: "GET",
             url: "/Adds",
             success: function (adds) {
-                console.log(adds);
                 printAdds(adds)
             }
         })
@@ -134,18 +133,22 @@ $(document).ready(function () {
 })
 function printAdds(adds) {
     var body = ''
-    for (add of adds) {
-        body += `
+    if (adds) {
+        for (add of adds) {
+            body += `
         <div class="adds-item">
             <a href="#">`
-        if (add.pictures.length > 0) {
-            body += `<img src="Content/farmtracker/img/${add.pictures[0].address}" alt="">`
-        }else{
-            body += `<img src="Content/farmtracker/img/null-content.png" alt="">`
-        }
-        body +=       `<h1>${add.name}</h1>
+            if (add.pictures.length > 0) {
+                body += `<img src="Content/farmtracker/img/${add.pictures[0].address}" alt="">`
+            } else {
+                body += `<img src="Content/farmtracker/img/null-content.png" alt="">`
+            }
+            body += `<h1>${add.name}</h1>
             </a>
         </div>`
+        }
+    } else {
+        body = "<h2>There is no add!</h2>"
     }
     $('#addsContainer').html(body)
 }

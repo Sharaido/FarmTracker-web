@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     if ($('#allProperties').length > 0) {
         var FUID = window.location.href.toString().split("/").pop()
+        
         $.ajax({
             type: "GET",
             url: "/Farms/GetFarmPropertiesFromFUID/" + FUID,
@@ -340,8 +341,6 @@ function getCategoryProperties(CUID) {
                 if ($("#hiddenEUID").length > 0) {
                     getEntityCPValues($("#hiddenEUID").val())
                 }
-            } else {
-                alert("Category properties could not be received #1")
             }
         },
         error: function () {
@@ -831,7 +830,7 @@ function deleteIAE(IEUID) {
 /* FP Entity Details */
 
 $(document).ready(function () {
-    if ($("#categoryProperties").length > 0) {
+    if ($("#categoryProperties").length > 0 && $("#hiddenCUID").length > 0 && $("#hiddenCUID").val()) {
         getCategoryProperties($("#hiddenCUID").val())
     }
 })

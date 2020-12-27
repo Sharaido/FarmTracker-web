@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 
 namespace FarmTracker_web.Models.Adds
@@ -22,5 +23,18 @@ namespace FarmTracker_web.Models.Adds
         public DateTime? DeletedDate { get; set; }
         public Guid? DeletedByUuid { get; set; }
         public IEnumerable<Pictures> Pictures { get; set; }
+        public string CP_1 { get; set; }
+        public string CP_2 { get; set; }
+        public string CP_3 { get; set; }
+        public string CP_4 { get; set; }
+        public string CP_5 { get; set; }
+        public string CP_6 { get; set; }
+        public string CP_7 { get; set; }
+        public string CP_8 { get; set; }
+        public string CP_9 { get; set; }
+        public string CP_10 { get; set; }
+        public IFormFile Picture_1 { get; set; }
+        public IFormFile Picture_2 { get; set; }
+        public IFormFile Picture_3 { get; set; }
     }
 }

@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "PostAdd";
+}
+
+<h1>Post Add</h1>
+
+<form method="post" asp-controller="Adds" asp-action="InsertAdd" id="postAddForm" class="form-group" enctype="multipart/form-data">
+    <div id="postAddFormWarn"></div>
+    <div id="categorySelects" class="row"></div>
+    <input type="hidden" id="CUID" name="CUID" value="">
+    <div>
+        <label for="Name">Title</label>
+        <input type="text" id="Name" name="Name" class="form-control mb-3" required />
+    </div>
+    <label for="Description">Description</label>
+    <textarea id="Description" name="Description" class="form-control mb-3" rows="3"></textarea>
+    <label for="Price">Price</label>
+    <input type="number" id="Price" name="Price" class="form-control mb-3" required />
+    <div id="categoryProperties"></div>
+    <label>Pictures</label>
+    <input type="file" id="Picture_1" name="Picture_1" class="form-control mb-3" accept="image/*" />
+    <input type="file" id="Picture_2" name="Picture_2" class="form-control mb-3" accept="image/*" />
+    <input type="file" id="Picture_3" name="Picture_3" class="form-control mb-3" accept="image/*" />
+    <input type="button" id="postAddFormBtn" class="btn btn-primary" value="Submit" />
+    <input type="submit" id="" class="btn btn-primary" value="Submit" />
+</form>
+
+
+@section Scripts{
+    <script src="~/Content/farmTracker/js/farms.js"></script>
+    <script src="~/Content/farmTracker/js/adds.js"></script>
+}
