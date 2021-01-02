@@ -516,5 +516,70 @@ namespace FarmTracker_web.Controllers
             }
             return false;
         }
+
+
+        [HttpGet("[controller]/CollaboratorRoles")]
+        public IEnumerable<CRoles> GetCollaboratorRoles(string FUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/CollaboratorRoles/",
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var roles = JsonConvert.DeserializeObject<IEnumerable<CRoles>>(r);
+                return roles;
+            }
+            return null;
+        }
+        [HttpGet("[controller]/Collaborators/{FUID}")]
+        public IEnumerable<Collaborators> GetCollaborators(string FUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Collaborators/" + FUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var collaborators = JsonConvert.DeserializeObject<IEnumerable<Collaborators>>(r);
+                return collaborators;
+            }
+            return null;
+        }
+        [HttpPost("[controller]/Collaborators/")]
+        public Collaborators AddOrUpdateCollaborators(Collaborators collaborator)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Collaborators/",
+                JsonConvert.SerializeObject(collaborator),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var _r = JsonConvert.DeserializeObject<Collaborators>(r);
+                return _r;
+            }
+            return null;
+        }
+        [HttpDelete("[controller]/Collaborators/")]
+        public bool DeleteCollaborators(Collaborators collaborator)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Collaborators/",
+                JsonConvert.SerializeObject(collaborator),
+                HttpMethod.Delete,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                return JsonConvert.DeserializeObject<bool>(r);
+            }
+            return false;
+        }
     }
 }

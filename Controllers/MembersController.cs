@@ -92,6 +92,11 @@ namespace FarmTracker_web.Controllers
                 case 5: memberType = "Professional"; break;
                 default: memberType = "Unknown"; break;
             }
+            string farmFlag = "false";
+            if (user.Mtuid != 1 || (user.Collaborators != null && user.Collaborators.Count() > 0))
+            {
+                farmFlag = "true";
+            }
             string phone = "";
             if (!String.IsNullOrEmpty(user.PhoneNumber))
                 phone = user.PhoneNumber;
@@ -108,6 +113,7 @@ namespace FarmTracker_web.Controllers
                 new Claim(ClaimTypes.MobilePhone, phone),
                 new Claim("MemberTypeName", memberType),
                 new Claim("UUID", user.Uuid.ToString()),
+                new Claim("FarmFlag", farmFlag),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -288,6 +294,22 @@ namespace FarmTracker_web.Controllers
             currentUser.MemberTypeName = User.Claims.FirstOrDefault(e => e.Type.Equals("MemberTypeName")).Value;
             currentUser.Uuid = new Guid(User.Claims.FirstOrDefault(e => e.Type.Equals("UUID")).Value);
             return currentUser;
+        }
+
+        [HttpGet("[controller]/SearchUser/{key}")] 
+        public IEnumerable<Users> SearchUser(string key)
+        {
+            var r = StaticFunctions.Request(
+                "Members/SearchUser/" + key,
+                "",
+                HttpMethod.Get
+                );
+            if (r == null)
+            {
+                return null;
+            }
+
+            return JsonConvert.DeserializeObject<IEnumerable<Users>>(r);
         }
     }
 }

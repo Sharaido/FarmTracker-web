@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FarmTracker_web.Models.Farms;
+using System;
 using System.Collections.Generic;
 
 namespace FarmTracker_web.Models.Members
@@ -22,5 +23,6 @@ namespace FarmTracker_web.Models.Members
         public int Ruid { get; set; }
         public int Mtuid { get; set; }
         public string MemberTypeName { get; set; }
+        public IEnumerable<Collaborators> Collaborators { get; set; }
     }
 }

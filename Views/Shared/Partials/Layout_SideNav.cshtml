@@ -1,7 +1,7 @@
 ﻿<nav id="dk-nav" class="dk-nav">
     <div class="dk-nav-header">
-        <a href="#">
-            <img src="~/Content/img/systemPics/kardo.png" alt="Kardo" />
+        <a href="/">
+            <img src="~/Content/farmTracker/img/logo.png"/>
             <span class="header-sub"></span>
         </a>
         <span class="dk-nav-header-btn"><i class="fa fa-chevron-left"></i></span>
@@ -13,13 +13,16 @@
         <li><a href="/"><i class="fa fa-home"></i><span>Homepage</span></a></li>
         @if (User.Identity.IsAuthenticated)
         {
-            <li><a href="/Members/Profile"><i class="far fa-user"></i><span>Profile</span></a></li>
-            <li><a href="#"><i class="fas fa-envelope"></i><span>Messages</span></a></li>
             if (User.FindFirst(claim => claim.Type == "MemberType")?.Value != "1")
             {
                 <li class="" id="farmLinks"></li>
                 <li><a href="#"><i class="fas fa-dollar-sign"></i><span>Income and Expenses</span></a></li>
                 <li><a href="/Adds/PostAdd"><i class="fas fa-plus"></i><span>Post Free Add</span></a></li>
+            }
+            else if (User.FindFirst(claim => claim.Type == "FarmFlag")?.Value == "true")
+            {
+                <li class="" id="farmLinks"></li>
+                <input type="hidden" value="true" id="FarmFlagHidden"/>
             }
             <li><a href="javascript:logoutBtn_OnClick();"><i class="fas fa-sign-out-alt"></i><span>Sign Out</span></a></li>
         }
@@ -30,7 +33,7 @@
         <a href="javascript:;" class="dk-btn round-btn"><i class="fab fa-twitch"></i></a>
     </div>
     <div class="dk-nav-footer">
-        <a href="#"><img src="~/Content/img/systemPics/kardo.png" alt="Kardo" /></a>
-        <div>Copyright © 2019</div>
+        <a href="#"><img src="~/Content/farmTracker/img/logo.png" /></a>
+        <div>Copyright © 2020</div>
     </div>
 </nav>

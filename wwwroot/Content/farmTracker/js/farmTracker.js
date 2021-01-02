@@ -20,7 +20,8 @@ function printFarmLinks(farms){
         for (var farm of farms)
             body += `<li><a href="/Farms/${farm.fuid}">${farm.name}</a></li>`
     }
-    body +=     `<li><a href="javascript:addFarmPopup();">Add Farm</li>`
+    if ($('#FarmFlagHidden').length == 0) 
+        body +=     `<li><a href="javascript:addFarmPopup();">Add Farm</li>`
     body +=   `</ul>`
     $('#farmLinks').html(body)
     addNestedLinks($('#dk-nav')[0])

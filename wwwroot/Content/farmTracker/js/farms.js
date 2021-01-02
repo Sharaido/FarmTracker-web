@@ -1229,3 +1229,185 @@ function deleteFarmEntity(EUID) {
 }
 /* Delete Farm Entities END */
 
+
+/* Get Collaborators */
+$(document).ready(function () {
+    if ($('#collaboratorsContainer').length > 0) {
+        var FUID = window.location.href.toString().split("/").pop()
+        $.ajax({
+            type: "GET",
+            url: "/Farms/Collaborators/" + FUID,
+            success: function (collaborators) {
+                if (collaborators) {
+                    printCollaborators(collaborators)
+                }
+            }
+        })
+    }
+})
+function printCollaborators(collaborators) {
+    console.log(collaborators)
+    var body = ""
+    for (i of collaborators) {
+        body += `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;" data-collaborator-user-id="${i.uuid}">
+                    <b>@${i.uu.username}</b> - ${i.uu.name} ${i.uu.surname}
+                    <a href="javascript:deleteCollaboratorPopup('${i.uu.username}', '${i.uuid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
+                </div>`
+    }
+    $('#collaboratorsContainer').html(body)
+}
+/* Get Collaborators END */
+/* Add Collaborator */
+function addCollaboratorPopup() {
+    var FUID = window.location.href.toString().split("/").pop()
+    var formBody = `
+    <div class="container">
+        <div id="addCollaboratorWarn"></div>
+        <form id="searchUser" method="POST">
+            <div class="form-group">
+                <label for="key">Search User</label>
+                <input type="text" class="form-control" id="key" required>
+            </div>
+            <input type="submit" value="Search" id="searchUserBtn" class="btn btn-primary">
+        </form>
+        <br/>
+        <form id="addCollaborator" method="POST">
+            <div class="form-group">
+                <label>Users</label>
+                <div id="searchUserResults">Search User</div>
+            </div>
+            <div class="form-group">
+                <label for="RUID">Role</label>
+                <select name="RUID" id="RUID" class="form-control">
+                    
+                </select>
+            </div>
+            <input type="hidden" id="FUID" name="FUID" value="${FUID}">
+        </form>
+    </div>`
+    dkPopupElAddCollaborator = dkPopup({
+        title: 'Add Collaborator',
+        type: 'confirm',
+        confirmClick: function () {
+            submitAddCollaboratorForm()
+        },
+        content: formBody
+    })
+
+    getCollaboratorRoles()
+
+    $('#searchUser').submit(() => {
+        $.ajax({
+            type: "GET",
+            url: "/Members/SearchUser/" + $('#searchUser #key').val(),
+            success: function (users) {
+                console.log(users)
+                if (users) {
+                    printUsers(users)
+                    removeLoading()
+                } else {
+                    $('#searchUserResults').html(`Any user not found!`)
+                    confirmBtn.removeAttr('disabled').removeClass('disabled')
+                    removeLoading()
+                }
+            }
+        })
+        return false
+    })
+}
+function submitAddCollaboratorForm() {
+    console.log($('#addCollaborator [name = "UUID"]:selected').val())
+    if (!$('#addCollaborator [name = "UUID"]:checked').val()) {
+        $('#addCollaboratorWarn').html(`<div class="alert alert-danger" role="alert">Select user!</div>`)
+        return
+    }
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "POST",
+        url: "/Farms/Collaborators",
+        data: $('#addCollaborator').serialize(),
+        success: function (collaborator) {
+            if (collaborator) {
+                dkPopupElAddCollaborator.closeDkPop();
+                printCollaborator(collaborator)
+                removeLoading()
+            } else {
+                $('#addCollaboratorWarn').html(`<div class="alert alert-danger" role="alert">User could be inserted already! Farm owner cannot be inserted as a collaborator!</div>`)
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        }
+    })
+}
+function printCollaborator(i) {
+    var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;" data-collaborator-user-id="${i.uuid}">
+                    <b>@${i.uu.username}</b> - ${i.uu.name} ${i.uu.surname}
+                    <a href="javascript:deleteCollaboratorPopup('${i.uu.username}', '${i.uuid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
+                </div>`
+
+    $('#collaboratorsContainer').prepend(body)
+}
+function printUsers(users) {
+    var body = ''
+    for (i of users) {
+        body += `<label class="form-control"><input type="radio" name="UUID" value="${i.uuid}"/>@${i.username} - ${i.name} ${i.surname}</label>`
+    }
+
+    $('#searchUserResults').html(body)
+}
+function getCollaboratorRoles() {
+    $.ajax({
+        type: "GET",
+        url: "/Farms/CollaboratorRoles",
+        success: function (roles) {
+            if (roles) {
+                var body = ""
+                for (i of roles) {
+                    body += `<option value="${i.ruid}">${i.name}</option>`
+                }
+                $('#RUID').html(body)
+            }
+        }
+    })
+}
+/* Add Collaborator END */
+/* Delete Collaborator */
+function deleteCollaboratorPopup(username, UUID, e) {
+    var FUID = window.location.href.toString().split("/").pop()
+    dkPopupElDeleteCollaborator = dkPopup({
+        model: 'simple-confirm',
+        title: 'Remove Collaborator',
+        type: 'confirm',
+        confirmClick: function () {
+            deleteCollaborator(UUID, FUID)
+        },
+        content: `Do you want to remove <strong>@${username}</strong> from collaborators`
+    })
+}
+function deleteCollaborator(UUID, FUID) {
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "DELETE",
+        url: "/Farms/Collaborators/",
+        data: {
+            "UUID": UUID,
+            "FUID": FUID
+        },
+        success: function (result) {
+            if (result) {
+                $(`[data-collaborator-user-id="${UUID}"]`).remove()
+                dkPopupElDeleteCollaborator.closeDkPop();
+                removeLoading()
+            } else {
+                alert("Collaborator could not be deleted #1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        }
+    })
+}
+/* Delete Collaborator END */
