@@ -69,13 +69,11 @@ $(document).ready(function () {
 })
 
 function printEntities(entities) {
+    console.log(entities)
     allEntitiesBody = ""
     if (entities) {
         for (var entity of entities) {
-            allEntitiesBody += `<a href="${window.location.href.toString() + "/" + entity.euid}" class="list-group-item list-group-item-action d-flex align-items-center" style="color: #495057; font-weight: normal;">`
-            if (entity.id) 
-                allEntitiesBody += `<span class="badge badge-info badge-pill">${entity.id}</span> `
-            allEntitiesBody += `${entity.name} <span class="badge badge-primary badge-pill">${entity.count}</span> </a>`
+            allEntitiesBody += getEntityBody(entity)
         }
     }
 
@@ -86,7 +84,26 @@ function printEntities(entities) {
 
     $('#entities').html(allEntitiesBody)
 }
+function getEntityBody(entity) {
+    var date = ""
+    if (entity.lastModifiedDate) {
+        date = entity.lastModifiedDate.toString().replace("T", " ").substring(0, 16)
+    }
+    if (!entity.id) {
+        entity.id = "No Id"
+    }
+    if (entity.count > 1) {
+        entity.name = entity.count + "x "+ entity.name
+    }
+    var body = `<a href="${window.location.href.toString() + "/" + entity.euid}" class="entity-item">
+						<img src="../../Content/farmTracker/img/system/${entity.cu.pic}" alt="">
+						<div class="entity-name">${entity.name}</div>
+						<div class="entity-id"><b>ID: </b>${entity.id}</div>
+						<div class="entity-last-modified">Last modified: ${date}</div>
+				</a>`
 
+    return body
+}
 
 /* Add farm property */
 function addFarmPropertyPopup() {
@@ -437,11 +454,7 @@ function addFPEntityFormValidations() {
 }
 
 function printEntity(entity) {
-    var body = ""
-    body += `<a href="${window.location.href.toString() + "/" + entity.euid}" class="list-group-item list-group-item-action d-flex align-items-center" style="color: #495057; font-weight: normal;">`
-    if (entity.id)
-        body += `<span class="badge badge-info badge-pill">${entity.id}</span> `
-    body += `${entity.name} <span class="badge badge-primary badge-pill">${entity.count}</span> </a>`
+    var body = getEntityBody(entity)
     if (!body)
         body = "<h1>This property have not any entity!</h1>"
 
@@ -1103,6 +1116,9 @@ $(document).ready(function () {
             success: function (entities) {
                 if (entities) {
                     printFarmEntities(entities)
+                } else {
+                    $('#productsContainer').addClass('null-content')
+                    $('#productsContainer').html("This farm have not any products!")
                 }
             }
         })
@@ -1187,6 +1203,10 @@ function submitaddFarmEntityForm() {
     })
 }
 function printFarmEntity(i) {
+    if ($('#productsContainer').hasClass('null-content')) {
+        $('#productsContainer').removeClass('null-content')
+        $('#productsContainer').html('')
+    }
     var body = getFarmEntityBody(i)
     $('#productsContainer').prepend(body)
 }
@@ -1236,6 +1256,11 @@ $(document).ready(function () {
             success: function (collaborators) {
                 if (collaborators) {
                     printCollaborators(collaborators)
+                } else {
+                    $('#farmCollaborators').addClass('null-content')
+                    $('#farmCollaborators').html("This farm have not any collaborator!")
+                    $('#collaboratorsContainer').addClass('null-content')
+                    $('#collaboratorsContainer').html("This farm have not any collaborator!")
                 }
             }
         })
@@ -1353,7 +1378,17 @@ function submitAddCollaboratorForm() {
     })
 }
 function printCollaborator(i) {
+    if ($('#farmCollaborators').hasClass('null-content')) {
+        $('#farmCollaborators').removeClass('null-content')
+        $('#farmCollaborators').html('')
+    }
+    if ($('#collaboratorsContainer').hasClass('null-content')) {
+        $('#collaboratorsContainer').removeClass('null-content')
+        $('#collaboratorsContainer').html('')
+    }
+
     var body = getCollaboratorBody(i)
+    $('#farmCollaborators').prepend(body)
     $('#collaboratorsContainer').prepend(body)
 }
 function printUsers(users) {

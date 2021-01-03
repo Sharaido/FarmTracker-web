@@ -2,39 +2,22 @@
 @{
     ViewData["Title"] = "Property";
 }
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/Farms/@Model.Fuid">@ViewData["CurrentFarmName"]</a></li>
-        <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
-    </ol>
-</nav>
-<hr>
-<div class="row">
-    <div class="col-8">
-        <div class="form-group">
-            <input type="text" class="form-control" id="" placeholder="Search Plant, Tree...">
+<div class="farm-property-container">
+    <button type="button" class="btn-plus express-menu-btn" data-menu-id="farmExpressMenu"><i class="fa fa-plus" data-menu-id="farmExpressMenu"></i></button>
+    <div class="express-menu" id="farmExpressMenu">
+        <a href="javascript:deleteFarmPropertyPopup('@Model.Name');" class="express-menu-item">Delete Property</a>
+        <a href="javascript:addFPEntityPopup();" class="express-menu-item">Add Entity</a>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search Properties" aria-label="Search Entities" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
         </div>
     </div>
-    <div class="col-2" style="text-align: right;">
-        <button type="button" class="btn btn-danger" onclick="deleteFarmPropertyPopup('@Model.Name')">Delete Property</button>
-    </div>
-    <div class="col-2" style="text-align: right;">
-        <button type="button" class="btn btn-success" onclick="addFPEntityPopup()">New Entity</button>
-    </div>
-</div>
-<div class="list-group">
-    <div id="entities">
+    <div class="entity-container" id="entities">
         <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
     </div>
 </div>
-
-@if (Model.Location != null)
-{
-    <br>
-    <hr>
-    <h2>Where is @Model.Name?</h2>
-    <div style="width: 100%"><iframe width="100%" height="400" src="https://maps.google.com/maps?width=100%&amp;height=400&amp;hl=en&amp;q=@Model.Location&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"><a href="https://www.maps.ie/map-my-route/">Draw map route</a></iframe></div>
-}
 <input type="hidden" id="PCUID" value="@Model.Cuid" />
 
 @section Scripts{

@@ -184,62 +184,53 @@
 		</div>
 	</nav>
 	<section id="container" class="container col-12">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="farm1.html">Farm1</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Infield1</li>
-            </ol>
-        </nav>
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-			<li class="nav-item">
-			    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Infields</a>
-			</li>
-		</ul>
-		<hr>
-		<div class="tab-content" id="pills-tabContent">
-			<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-				<div class="row">
-					<div class="col-10">
-						<div class="form-group">
-							<input type="text" class="form-control" id="" placeholder="Search Plant, Tree...">
-						</div>
-					</div>
-					<div class="col-2" style="text-align: right;">
-						<button type="button" class="btn btn-success"  onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">New Entity</button>
-					</div>
+		<div class="farm-property-container">
+			<button type="button" class="btn-plus express-menu-btn" data-menu-id="farmExpressMenu"><i class="fa fa-plus" data-menu-id="farmExpressMenu"></i></button>
+			<div class="express-menu" id="farmExpressMenu">
+				<a href="#" class="express-menu-item">Delete Farm</a>
+				<a href="#" class="express-menu-item">Add Property</a>
+				<a href="#" class="express-menu-item">Add Property</a>
+			</div>
+			<div class="input-group mb-3">
+				<input type="text" class="form-control" placeholder="Search Properties" aria-label="Search Properties" aria-describedby="basic-addon2">
+				<div class="input-group-append">
+				<button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
 				</div>
-                <div class="list-group">
-                    <div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;">
-						<a href="tree1.html"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</a>
-						<a href="javascript:;" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-					</div>
-                    <div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;">
-						<a href="tree1.html"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</a>
-						<a href="javascript:;" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-					</div>
-                    <div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;">
-						<a href="tree1.html"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</a>
-						<a href="javascript:;" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-					</div>
-                    <div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;">
-						<a href="tree1.html"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</a>
-						<a href="javascript:;" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-					</div>
-                    <div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;">
-						<a href="tree1.html"><span class="badge badge-info badge-pill">14</span> Dapibus ac facilisis in</a>
-						<a href="javascript:;" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-					</div>
-                 </div>
+			</div>
+			<div class="entity-container" id="entities">
+				<a href="#" class="entity-item">
+						<img src="img/system/fish.jpg" alt="">
+						<div class="entity-name">10x Property name</div>
+						<div class="entity-id"><b>ID: </b> </div>
+						<div class="entity-last-modified">Last modified: 2021-01-01 20:00</div>
+				</a>
+				<a href="#" class="entity-item">
+						<img src="img/system/fish.jpg" alt="">
+						<div class="entity-name">10x Property name</div>
+						<div class="entity-id"><b>ID: </b> </div>
+						<div class="entity-last-modified">Last modified: 2021-01-01 20:00</div>
+				</a>
+				<a href="#" class="entity-item">
+						<img src="img/system/fish.jpg" alt="">
+						<div class="entity-name">10x Property name</div>
+						<div class="entity-id"><b>ID: </b> </div>
+						<div class="entity-last-modified">Last modified: 2021-01-01 20:00</div>
+				</a>
+				<a href="#" class="entity-item">
+						<img src="img/system/fish.jpg" alt="">
+						<div class="entity-name">10x Property name</div>
+						<div class="entity-id"><b>ID: </b> </div>
+						<div class="entity-last-modified">Last modified: 2021-01-01 20:00</div>
+				</a>
+				<a href="#" class="entity-item">
+						<img src="img/system/fish.jpg" alt="">
+						<div class="entity-name">10x Property name</div>
+						<div class="entity-id"><b>ID: </b> </div>
+						<div class="entity-last-modified">Last modified: 2021-01-01 20:00</div>
+				</a>
 			</div>
 		</div>
-		<br>
-		<hr>
-		<h2>Where Is The Infield?</h2>
-		<div style="width: 100%"><iframe width="100%" height="400" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d196278.26717014762!2d30.404729588967523!3d39.76552271934071!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cc3e08220c0e5f%3A0xbc89395938049a08!2sEski%C5%9Fehir!5e0!3m2!1str!2str!4v1602973043827!5m2!1str!2str" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"><a href="https://www.maps.ie/map-my-route/">Draw map route</a></iframe></div>
+		
 	</section>
 	
 	
