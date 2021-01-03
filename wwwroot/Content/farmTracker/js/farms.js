@@ -13,46 +13,43 @@
             }
         })
     }
+    if ($('#lastIoeContainer').length > 0) {
+
+    }
 })
 
 function printProperties(properties) {
     allBody = ""
-    plantBody = ""
-    animalBody = ""
-
     if (properties) {
         for (var property of properties) {
-            var propertyBody = `
-                <div class="card">
-                    <div class="card-body">
-                        <a href="${window.location.href.toString() + "/" + property.puid}">${property.name}</a>
-                    </div>
-                </div>
-                <br>`
+            var propertyBody = getPropertyBody(property)
 
             allBody += propertyBody
-            if (property.cuid == 1)
-                plantBody += propertyBody
-            if (property.cuid == 2)
-                animalBody += propertyBody
         }
     }
     if (!allBody) {
         allBody = "<h1>This farm have not any property!</h1>"
         $('#allProperties').addClass('null-content')
-    } 
-    if (!plantBody) {
-        plantBody = "<h1>This farm have not any plant property!</h1>"
-        $('#plantProperties').addClass('null-content')
     }
-    if (!animalBody) {
-        animalBody = "<h1>This farm have not any animal property!</h1>"
-        $('#animalProperties').addClass('null-content')
+    $('#allProperties .out-of-middle').remove()
+    $('#allProperties').append(allBody)
+}
+function getPropertyBody(property) {
+    var date = ""
+    if (property.lastModifiedDate) {
+        date = property.lastModifiedDate.toString().replace("T", " ").substring(0, 16)
     }
+    if (!property.description) {
+        property.description = "No description"
+    }
+    var body = `<a href="${window.location.href.toString() + "/" + property.puid}" class="property-item">
+						<img src="../Content/farmTracker/img/system/${property.cu.pic}" alt="">
+						<div class="property-name">${property.name}</div>
+						<div class="property-desc">${property.description}</div>
+						<div class="property-last-modified">Last modified: ${date}</div>
+				</a>`
 
-    $('#allProperties').html(allBody)
-    $('#plantProperties').html(plantBody)
-    $('#animalProperties').html(animalBody)
+    return body
 }
 
 $(document).ready(function () {
@@ -104,8 +101,10 @@ function addFarmPropertyPopup() {
                 <label for="">Property Type</label>
                 <select name="CUID" id="CUID" class="form-control">
                     <option value=""></option>
-                    <option value="1">Plants</option>
-                    <option value="2">Animals</option>
+                    <option value="40">Terrestrial Plants</option>
+                    <option value="38">Terrestrial Animals</option>
+                    <option value="39">Aquatic Plants</option>
+                    <option value="37">Aquatic Animals</option>
                 </select>
             </div>
             <div class="form-group">
@@ -182,37 +181,13 @@ function addFarmPropertyFormValidations() {
 
 function printProperty(property) {
     if (property) {
-        var propertyBody = `
-            <div class="card">
-                <div class="card-body">
-                    <a href="${window.location.href.toString() + "/" + property.puid}">${property.name}</a>
-                </div>
-            </div>
-            <br>`
-
+        var propertyBody = getPropertyBody(property)
         var allPropEl = $('#allProperties')
-        var plantPropEl = $('#plantProperties')
-        var animalPropEl = $('#animalProperties')
-
         if (allPropEl.hasClass('null-content')) {
             allPropEl.removeClass('null-content')
             allPropEl.html("")
         }
         allPropEl.prepend(propertyBody)
-        if (property.cuid == 1) {
-            if (plantPropEl.hasClass('null-content')) {
-                plantPropEl.removeClass('null-content')
-                plantPropEl.html("")
-            }
-            plantPropEl.prepend(propertyBody)
-        }
-        if (property.cuid == 2) {
-            if (animalPropEl.hasClass('null-content')) {
-                animalPropEl.removeClass('null-content')
-                animalPropEl.html("")
-            }
-            animalPropEl.prepend(propertyBody)
-        }
     }
 }
 /* Add farm property END */
@@ -480,7 +455,7 @@ function printEntity(entity) {
 /* Add FP Entity END */
 /* Get Income and Expenses */
 $(document).ready(function () {
-    if ($('#incomeAndExpensesContainer').length > 0) {
+    if ($('#lastIoeContainer').length > 0) {
         var FUID = window.location.href.toString().split("/").pop()
         $.ajax({
             type: "GET",
@@ -496,33 +471,29 @@ $(document).ready(function () {
 })
 
 function printIncomeAndExpenses(incomeAndExpenses) {
-    ieBody = ""
-    iBody = ""
-    eBody = ""
+    var lastIoaBody = ""
+    var lastCount = 0
+    var iBody = ""
+    var eBody = ""
     
     if (incomeAndExpenses) {
         for (var iae of incomeAndExpenses) {
-            var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;"  data-iae-id="${iae.ieuid}"><a href="javascript:;">`
-            if (iae.incomeFlag) {
-                body +=     `<span class="badge badge-primary badge-pill">${iae.cost}</span>`
-            } else {
-                body +=     `<span class="badge badge-danger badge-pill">${iae.cost}</span>`
-            }
-            body +=         `${iae.head}
-                            </a>
-                            <a href="javascript:deleteIAEPopup('${iae.head}', '${iae.ieuid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-                        </div>`
+            var body = getIoeBody(iae)
 
-            ieBody += body
             if (iae.incomeFlag)
                 iBody += body
             else
                 eBody += body
+
+            if (lastCount < 10) {
+                lastIoaBody += body
+            }
+            lastCount++
         }
     }
-    if (!ieBody) {
-        ieBody = "<h1>This farm have not any income or expense!</h1>"
-        $('#incomeAndExpensesContainer').addClass('null-content')
+    if (!lastIoaBody) {
+        lastIoaBody = "<p>This farm have not any income or expense!</p>"
+        $('#lastIoeContainer').addClass('null-content')
     }
     if (!iBody) {
         iBody = "<h1>This farm have not any income!</h1>"
@@ -533,9 +504,38 @@ function printIncomeAndExpenses(incomeAndExpenses) {
         $('#expensesContainer').addClass('null-content')
     }
 
-    $('#incomeAndExpensesContainer').html(ieBody)
+    $('#lastIoeContainer').html(lastIoaBody)
     $('#incomesContainer').html(iBody)
     $('#expensesContainer').html(eBody)
+
+
+    $('[data-toggle="popover"]').popover()
+}
+function getIoeBody(ioe) {
+    var clr = "danger"
+    if (ioe.incomeFlag) {
+        clr = "success"
+    }
+    var popoverBody = ``
+    if (ioe.description) {
+        popoverBody += `${ioe.description} </br>`
+    }
+    if (ioe.date) {
+        popoverBody += `<b>Date: </b>${ioe.date.toString().replace("T", " ").substring(0, 16)} </br>`
+    }
+    popoverBody += `<b>Cost: </b>$${ioe.cost} </br>`
+    popoverBody += `<b>Created By: </b>@${ioe.createdByUu.username} </br>`
+
+    var body = `<div class="ioe-item " data-toggle="popover" data-html="true" data-trigger="hover" title="${ioe.head}" data-content="${popoverBody}" data-iae-id="${ioe.ieuid}">
+					<div>
+						<i class="fa fa-money-bill-alt clr-${clr}"></i>
+						<div class="ioe-cost">$${ioe.cost}</div>
+						<div class="ioe-name">${ioe.head}</div>
+					</div>
+					<div class="ioe-delete"><a href="javascript:deleteIAEPopup('${ioe.head}', '${ioe.ieuid}');"><i class="fa fa-times"></i></a></div>
+				</div>`
+
+    return body
 }
 /* Get Income and Expenses END */
 /* Add Income and Expense */
@@ -638,20 +638,11 @@ function submitAddIncomeOrExpenseForm(incomeFlag) {
     })
 }
 function printIncomeOrExpense(ioe) {
-    var iaeEl = $('#incomeAndExpensesContainer')
+    var iaeEl = $('#lastIoeContainer')
     var iEl = $('#incomesContainer')
     var eEl = $('#expensesContainer')
 
-    var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;" data-iae-id="${ioe.ieuid}"><a href="javascript:;">`
-    if (ioe.incomeFlag) {
-        body +=     `<span class="badge badge-primary badge-pill">${ioe.cost}</span>`
-    } else {
-        body +=     `<span class="badge badge-danger badge-pill">${ioe.cost}</span>`
-    }
-    body +=         `${ioe.head}
-                    </a>
-                    <a href="javascript:deleteIAEPopup('${ioe.head}', '${ioe.ieuid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-                </div>`
+    var body = getIoeBody(ioe)
 
     if (iaeEl.hasClass('null-content')) {
         iaeEl.removeClass('null-content')
@@ -671,6 +662,8 @@ function printIncomeOrExpense(ioe) {
         }
         eEl.prepend(body)
     }
+
+    $('[data-toggle="popover"]').popover()
 
 }
 /* Add Income and Expense END */
@@ -1118,12 +1111,19 @@ $(document).ready(function () {
 function printFarmEntities(entities) {
     var body = ""
     for (i of entities) {
-        body += `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;"  data-farm-entity-id="${i.euid}">
-                    <span class="badge badge-primary badge-pill">${i.count}</span>${i.name}
-                    <a href="javascript:deleteFarmEntityPopup('${i.name}', '${i.euid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-                </div>`
+        body += getFarmEntityBody(i)
     }
     $('#productsContainer').html(body)
+}
+function getFarmEntityBody(entity) {
+    var body = `<div class="product-item" data-farm-entity-id="${entity.euid}">
+				    <div>
+					    <i class="fa fa-tools"></i>
+					    <div class="product-name">${entity.count}x ${entity.name}</div>
+				    </div>
+				    <div class="product-delete"><a href="javascript:deleteFarmEntityPopup('${entity.name}', '${entity.euid}');"><i class="fa fa-times"></i></a></div>
+			    </div>`
+    return body
 }
 /* Get Farm Entities END */
 /* Add Farm Entities */
@@ -1187,11 +1187,7 @@ function submitaddFarmEntityForm() {
     })
 }
 function printFarmEntity(i) {
-    var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;" data-farm-entity-id="${i.euid}">
-                    <span class="badge badge-primary badge-pill">${i.count}</span>${i.name}
-                    <a href="javascript:deleteFarmEntityPopup('${i.name}', '${i.euid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-                </div>`
-
+    var body = getFarmEntityBody(i)
     $('#productsContainer').prepend(body)
 }
 /* Add Farm Entities END */
@@ -1232,7 +1228,7 @@ function deleteFarmEntity(EUID) {
 
 /* Get Collaborators */
 $(document).ready(function () {
-    if ($('#collaboratorsContainer').length > 0) {
+    if ($('#farmCollaborators').length > 0) {
         var FUID = window.location.href.toString().split("/").pop()
         $.ajax({
             type: "GET",
@@ -1246,15 +1242,32 @@ $(document).ready(function () {
     }
 })
 function printCollaborators(collaborators) {
-    console.log(collaborators)
     var body = ""
     for (i of collaborators) {
-        body += `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;" data-collaborator-user-id="${i.uuid}">
-                    <b>@${i.uu.username}</b> - ${i.uu.name} ${i.uu.surname}
-                    <a href="javascript:deleteCollaboratorPopup('${i.uu.username}', '${i.uuid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-                </div>`
+        body += getCollaboratorBody(i)
     }
+    $('#farmCollaborators').html(body)
     $('#collaboratorsContainer').html(body)
+}
+function getCollaboratorBody(collaborator) {
+    if (!collaborator.uu.profilePic) {
+        collaborator.uu.profilePic = "profil_pic.png"
+    }
+    var body = `<div class="collaborator-item" data-collaborator-user-id="${collaborator.uu.uuid}">
+					<div>
+						<img src="../Content/img/userProfilPics//${collaborator.uu.profilePic}" alt="">
+						<div>
+							<div class="collaborator-name">${collaborator.uu.name} ${collaborator.uu.surname}</div>
+							<div>
+								<div class="collaborator-username">@${collaborator.uu.username}</div>
+								<div class="collaborator-role">${collaborator.ru.name}</div>
+							</div>
+						</div>
+					</div>
+					<div class="collaborator-delete"><a href="javascript:deleteCollaboratorPopup('${collaborator.uu.username}', '${collaborator.uuid}');"><i class="fa fa-times"></i></a></div>
+				</div>`
+
+    return body
 }
 /* Get Collaborators END */
 /* Add Collaborator */
@@ -1301,7 +1314,6 @@ function addCollaboratorPopup() {
             type: "GET",
             url: "/Members/SearchUser/" + $('#searchUser #key').val(),
             success: function (users) {
-                console.log(users)
                 if (users) {
                     printUsers(users)
                     removeLoading()
@@ -1316,7 +1328,6 @@ function addCollaboratorPopup() {
     })
 }
 function submitAddCollaboratorForm() {
-    console.log($('#addCollaborator [name = "UUID"]:selected').val())
     if (!$('#addCollaborator [name = "UUID"]:checked').val()) {
         $('#addCollaboratorWarn').html(`<div class="alert alert-danger" role="alert">Select user!</div>`)
         return
@@ -1342,11 +1353,7 @@ function submitAddCollaboratorForm() {
     })
 }
 function printCollaborator(i) {
-    var body = `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal;" data-collaborator-user-id="${i.uuid}">
-                    <b>@${i.uu.username}</b> - ${i.uu.name} ${i.uu.surname}
-                    <a href="javascript:deleteCollaboratorPopup('${i.uu.username}', '${i.uuid}');" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-                </div>`
-
+    var body = getCollaboratorBody(i)
     $('#collaboratorsContainer').prepend(body)
 }
 function printUsers(users) {

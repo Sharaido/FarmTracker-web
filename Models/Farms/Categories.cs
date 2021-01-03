@@ -7,6 +7,7 @@ namespace FarmTracker_web.Models.Farms
     {
         public int Cuid { get; set; }
         public string Name { get; set; }
+        public string Pic { get; set; }
         public bool? EndPointFlag { get; set; }
         public int? SubCategoryOfCuid { get; set; }
     }

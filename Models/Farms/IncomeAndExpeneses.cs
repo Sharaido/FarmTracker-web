@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FarmTracker_web.Models.Members;
+using System;
 
 namespace FarmTracker_web.Models.Farms
 {
@@ -15,5 +16,6 @@ namespace FarmTracker_web.Models.Farms
         public bool DeletedFlag { get; set; }
         public DateTime? DeletedDate { get; set; }
         public Guid? DeletedByUuid { get; set; }
+        public Users CreatedByUu { get; set; }
     }
 }

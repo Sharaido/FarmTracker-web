@@ -6,6 +6,7 @@
             <div class="member-types-container">
                 <label class="dark">
                     <div class="title">FARMER</div>
+                    <div>FREE</div>
                     <div>1 FARM</div>
                     <div>3 USERS</div>
                     <div>1 AD PER MONTH</div>
@@ -14,26 +15,29 @@
                 </label>
                 <label>
                     <div class="title">BUSSINES</div>
-                    <div>1 FARM</div>
-                    <div>3 USERS</div>
-                    <div>1 AD PER MONTH</div>
-                    <div>NO SUPPORT</div>
+                    <div>$50 PER MONTH</div>
+                    <div>3 FARM</div>
+                    <div>15 USERS</div>
+                    <div>5 AD PER MONTH</div>
+                    <div>7/24 SUPPORT</div>
                     <input type="radio" name="MTUID" value="4"/>
                 </label>
                 <label class="dark">
                     <div class="title">PROFESSIONAL</div>
-                    <div>1 FARM</div>
-                    <div>3 USERS</div>
-                    <div>1 AD PER MONTH</div>
-                    <div>NO SUPPORT</div>
+                    <div>$75 PER MONTH</div>
+                    <div>5 FARM</div>
+                    <div>25 USERS</div>
+                    <div>15 AD PER MONTH</div>
+                    <div>7/24 SUPPORT</div>
                     <input type="radio" name="MTUID" value="5"/>
                 </label>
                 <label>
                     <div class="title">ADVENCED</div>
-                    <div>1 FARM</div>
-                    <div>3 USERS</div>
-                    <div>1 AD PER MONTH</div>
-                    <div>NO SUPPORT</div>
+                    <div>$150 PER MONTH</div>
+                    <div>LIMITLESS FARM</div>
+                    <div>LIMITLESS USERS</div>
+                    <div>LIMITLESS AD PER MONTH</div>
+                    <div>7/24 SUPPORT</div>
                     <input type="radio" name="MTUID" value="3"/>
                 </label>
             </div>

@@ -47,7 +47,7 @@ function printDHUser(userInfo) {
                                     <div class="user-info">
                                         <div class="user-rname">${userInfo.UserRName}</div>
                                         <div class="username">&#64;${userInfo.Username}</div>
-                                        <div class="user-profil-link"><a href="#" class="dk-btn dk-btn-primary">Go Profil</a></div>
+                                        <div class="user-profil-link"><a href="/Members/Profile" class="dk-btn dk-btn-primary">Go Profil</a></div>
                                     </div>
                                     <div class="clear-both"></div>
                                 </div>
@@ -70,7 +70,7 @@ function printDHUser(userInfo) {
 function printNavUser(userInfo) {
     navUserBody = "";
     if (userInfo) {
-        navUserBody =   `<a href="javascript:;" class="dk-nav-user">
+        navUserBody =   `<a href="/Members/Profile" class="dk-nav-user">
                             <img src="/Content/img/userProfilPics/${userInfo.ProfilPic}" alt="${userInfo.ProfilPic}" />
                             <span>${userInfo.UserRName}</span>
                         </a>`;

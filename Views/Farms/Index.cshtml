@@ -10,16 +10,10 @@
 </nav>
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="true">All</a>
+        <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="true">Properties</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="pills-animal-tab" data-toggle="pill" href="#pills-animal" role="tab" aria-controls="pills-animal" aria-selected="true">Animal Properties</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="pills-plant-tab" data-toggle="pill" href="#pills-plant" role="tab" aria-controls="pills-plant" aria-selected="true">Plant Properties</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="pills-products-tab" data-toggle="pill" href="#pills-products" role="tab" aria-controls="pills-products" aria-selected="false">Products</a>
+        <a class="nav-link" id="pills-details-tab" data-toggle="pill" href="#pills-details" role="tab" aria-controls="pills-details" aria-selected="false">Details</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="pills-incomeAndExpenses-tab" data-toggle="pill" href="#pills-incomeAndExpenses" role="tab" aria-controls="pills-incomeAndExpenses" aria-selected="false">Income And Expenses</a>
@@ -28,109 +22,80 @@
 <hr>
 <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
-        <div class="row">
-            <div class="col-8">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="" placeholder="Search Property">
-                </div>
+        <div class="farm-container">
+            <button type="button" class="btn-plus express-menu-btn" data-menu-id="farmExpressMenu"><i class="fa fa-plus" data-menu-id="farmExpressMenu"></i></button>
+            <div class="express-menu" id="farmExpressMenu">
+                <a href="javascript:deleteFarmPopup('@Model.Name');" class="express-menu-item">Delete Farm</a>
+                <a href="javascript:addFarmPropertyPopup();" class="express-menu-item">New Property</a>
             </div>
-            <div class="col-2" style="text-align: right;">
-                <button type="button" class="btn btn-danger" onclick="deleteFarmPopup('@Model.Name')">Delete Farm</button>
-            </div>
-            <div class="col-2" style="text-align: right;">
-                <button type="button" class="btn btn-success" onclick="addFarmPropertyPopup()">New Property</button>
-            </div>
-        </div>
-        <div id="allProperties">
-            <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="pills-animal" role="tabpanel" aria-labelledby="pills-animal-tab">
-        <div class="row">
-            <div class="col-10">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="" placeholder="Search Ranch">
-                </div>
-            </div>
-            <div class="col-2" style="text-align: right;">
-                <button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">
-                    New Ranch
-                </button>
-            </div>
-        </div>
-        <div id="animalProperties">
-            <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="pills-plant" role="tabpanel" aria-labelledby="pills-plant-tab">
-        <div class="row">
-            <div class="col-10">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="" placeholder="Search Ranch">
-                </div>
-            </div>
-            <div class="col-2" style="text-align: right;">
-                <button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">
-                    New Ranch
-                </button>
-            </div>
-        </div>
-        <div id="plantProperties">
-            <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="pills-products" role="tabpanel" aria-labelledby="pills-products-tab">
 
-        <div class="row">
-            <div class="col-12">
-                <button type="button" class="btn btn-success" onclick="addFarmEntityPopup()">New Product</button>
+            <div class="property-container-overlay">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search Properties" aria-label="Search Properties" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="property-container" id="allProperties">
+                    <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+                </div>
+            </div>
+            <div class="extras-container">
+                <h2>Collaborators</h2>
+                <div class="collaborator-container" id="farmCollaborators">
+                    <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+                </div>
+                <h2>Last Income and Expenses</h2>
+                <div class="ioe-container" id="lastIoeContainer">
+                    <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+                </div>
             </div>
         </div>
-        <br />
-        <div class="list-group" id="productsContainer">
-            <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+    </div>
+    <div class="tab-pane fade" id="pills-details" role="tabpanel" aria-labelledby="pills-details-tab">
+        <button type="button" class="btn-plus express-menu-btn" data-menu-id="farmDetailsExpressMenu"><i class="fa fa-plus" data-menu-id="farmDetailsExpressMenu"></i></button>
+        <div class="express-menu" id="farmDetailsExpressMenu">
+            <a href="javascript:addFarmEntityPopup();" class="express-menu-item">Add Product</a>
+            <a href="javascript:addCollaboratorPopup();" class="express-menu-item">Add Collaborator</a>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <h1><i class="fa fa-tools"></i> Products</h1>
+                <div class="product-container" id="productsContainer">
+                    <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+                </div>
+            </div>
+            <div class="col-6">
+                <h1><i class="fa fa-user"></i> Collaborators</h1>
+                <div class="collaborator-container" id="collaboratorsContainer">
+                    <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="tab-pane fade" id="pills-incomeAndExpenses" role="tabpanel" aria-labelledby="pills-incomeAndExpenses-tab">
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="pills-allIE-tab" data-toggle="pill" href="#pills-allIE" role="tab" aria-controls="pills-allIE" aria-selected="true">All</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="pills-expenses-tab" data-toggle="pill" href="#pills-expenses" role="tab" aria-controls="pills-expenses" aria-selected="true">Incomes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="pills-incomes-tab" data-toggle="pill" href="#pills-incomes" role="tab" aria-controls="pills-incomes" aria-selected="true">Expenses</a>
-            </li>
-        </ul>
-        <hr>
+        <button type="button" class="btn-plus express-menu-btn" data-menu-id="IoeExpressMenu"><i class="fa fa-plus" data-menu-id="IoeExpressMenu"></i></button>
+        <div class="express-menu" id="IoeExpressMenu">
+            <a href="javascript:addIncomeOrExpensePopup(true);" class="express-menu-item">Add Income</a>
+            <a href="javascript:addIncomeOrExpensePopup(false);" class="express-menu-item">Add Expense</a>
+        </div>
         <div class="row">
-            <div class="col-12">
-                <button type="button" class="btn btn-success" onclick="addIncomeOrExpensePopup(true)">Add Income</button>
-                <button type="button" class="btn btn-success" onclick="addIncomeOrExpensePopup(false)">Add Expense</button>
+            <div class="col-6">
+                <h1>Incomes</h1>
+                <div class="ioe-container" id="incomesContainer">
+                    <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+                </div>
+            </div>
+            <div class="col-6">
+                <h1>Expenses</h1>
+                <div class="ioe-container" id="expensesContainer">
+                    <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+                </div>
             </div>
         </div>
-        <br>
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-allIE" role="tabpanel" aria-labelledby="pills-allIE-tab">
-                <div class="list-group" id="incomeAndExpensesContainer"></div>
-            </div>
-            <div class="tab-pane fade" id="pills-expenses" role="tabpanel" aria-labelledby="pills-all-expenses">
-                <div class="list-group" id="incomesContainer"></div>
-            </div>
-            <div class="tab-pane fade" id="pills-incomes" role="tabpanel" aria-labelledby="pills-all-incomes">
-                <div class="list-group" id="expensesContainer"></div>
-            </div>
-        </div>
+
     </div>
+    <input type="hidden" value="@Model.Fuid" id="hiddenFUID" />
 </div>
 
 @section Scripts{

@@ -203,51 +203,138 @@
 		<hr>
 		<div class="tab-content" id="pills-tabContent">
 			<div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
-				<div class="row">
-					<div class="col-10">
-						<div class="form-group">
-							<input type="text" class="form-control" id="" placeholder="Search Property">
+				<div class="farm-container">
+					<button type="button" class="btn-plus express-menu-btn" data-menu-id="farmExpressMenu"><i class="fa fa-plus" data-menu-id="farmExpressMenu"></i></button>
+					<div class="express-menu" id="farmExpressMenu">
+						<a href="#" class="express-menu-item">Delete Farm</a>
+						<a href="#" class="express-menu-item">Add Property</a>
+						<a href="#" class="express-menu-item">Add Property</a>
+					</div>
+					<div class="property-container-overlay">
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" placeholder="Search Properties" aria-label="Search Properties" aria-describedby="basic-addon2">
+							<div class="input-group-append">
+							<button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
+							</div>
+						</div>
+						<div class="property-container" id="allProperties">
+
+							<a href="#" class="property-item">
+									<img src="img/system/animal_property1.jpg" alt="">
+									<div class="property-name">Property name</div>
+									<div class="property-desc">Property desc desc desc desc desc desc desc desc desc desc descdesc desc desc</div>
+									<div class="property-last-modified">Last modified: 2021-01-01 20:00</div>
+							</a>
+							<a href="#" class="property-item">
+									<img src="img/system/plant_property1.jpg" alt="">
+									<div class="property-name">Property name</div>
+									<div class="property-desc">Property desc desc desc desc desc desc desc desc desc desc descdesc desc desc</div>
+									<div class="property-last-modified">Last modified: 2021-01-01 20:00</div>
+							</a>
+							<a href="#" class="property-item">
+									<img src="img/system/animal_property1.jpg" alt="">
+									<div class="property-name">Property name</div>
+									<div class="property-desc">Property desc desc desc desc desc desc desc desc desc desc descdesc desc desc</div>
+									<div class="property-last-modified">Last modified: 2021-01-01 20:00</div>
+							</a>
+							<a href="#" class="property-item">
+									<img src="img/system/plant_property1.jpg" alt="">
+									<div class="property-name">Property name</div>
+									<div class="property-desc">Property desc desc desc desc desc desc desc desc desc desc descdesc desc desc</div>
+									<div class="property-last-modified">Last modified: 2021-01-01 20:00</div>
+							</a>
 						</div>
 					</div>
-					<div class="col-2" style="text-align: right;">
-						<button type="button" class="btn btn-success" onclick="dkPopup({
-                            type: 'iframe',
-                            iframeSrc: 'form.html',
-                            title: 'Iframe Popup'
-                        })">New Property</button>
+					<div class="extras-container">
+						<h2>Collaborators</h2>
+						<div class="collaborator-container">
+							<div class="collaborator-item">
+								<div>
+									<img src="img/system/f-logo.png" alt="">
+									<div>
+										<div class="collaborator-name">Doğuş Kar</div>
+										<div>
+											<div class="collaborator-username">@doguskar</div>
+											<div class="collaborator-role">Manager</div>
+										</div>
+									</div>
+								</div>
+								<div class="collaborator-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+							</div>
+							<div class="collaborator-item">
+								<div>
+									<img src="img/system/f-logo.png" alt="">
+									<div>
+										<div class="collaborator-name">Doğuş Kar</div>
+										<div>
+											<div class="collaborator-username">@doguskar</div>
+											<div class="collaborator-role">Manager</div>
+										</div>
+									</div>
+								</div>
+								<div class="collaborator-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+							</div>
+							<div class="collaborator-item">
+								<div>
+									<img src="img/system/f-logo.png" alt="">
+									<div>
+										<div class="collaborator-name">Doğuş Kar</div>
+										<div>
+											<div class="collaborator-username">@doguskar</div>
+											<div class="collaborator-role">Manager</div>
+										</div>
+									</div>
+								</div>
+								<div class="collaborator-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+							</div>
+						</div>
+						<h2>Last Income and Expenses</h2>
+						<div class="ioe-container" >
+							<div class="ioe-item " data-toggle="popover" data-html="true" data-trigger="hover" title="Name" data-content="desc desc desc cost created by" >
+								<div>
+									<i class="fa fa-money-bill-alt clr-success"></i>
+									<div class="ioe-cost">$10.00</div>
+									<div class="ioe-name">Cost</div>
+								</div>
+								<div class="ioe-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+							</div>
+							<div class="ioe-item expense">
+								<div>
+									<i class="fa fa-money-bill-alt clr-danger"></i>
+									<div class="ioe-cost">$10.00</div>
+									<div class="ioe-name">Cost</div>
+								</div>
+								<div class="ioe-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+							</div>
+						</div>
+						<h2>Products</h2>
+						<div class="product-container">
+							<div class="product-item">
+								<div>
+									<i class="fa fa-tools"></i>
+									<div class="product-name">10x Bilmem ne</div>
+								</div>
+								<div class="product-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+							</div>
+							<div class="product-item">
+								<div>
+									<i class="fa fa-tools"></i>
+									<div class="product-name">10x Bilmem ne</div>
+								</div>
+								<div class="product-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+							</div>
+							<div class="product-item">
+								<div>
+									<i class="fa fa-tools"></i>
+									<div class="product-name">10x Bilmem ne</div>
+								</div>
+								<div class="product-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="card">
-					<div class="card-body">
-						<a href="infield1.html">Infield 1</a>
-						<a href="javascript:;" class="float-right"><i class="fa fa-times clr-danger"></i></a>
-					</div>
-				</div>
-				<br>
-				<div class="card">
-					<div class="card-body">
-						<a href="infield1.html">Infield 1</a>
-					</div>
-				</div>
-				<br>
-				<div class="card">
-					<div class="card-body">
-						<a href="infield1.html">Infield 1</a>
-					</div>
-				</div>
-				<br>
-				<div class="card">
-					<div class="card-body">
-						<a href="infield1.html">Infield 1</a>
-					</div>
-				</div>
-				<br>
-				<div class="card">
-					<div class="card-body">
-						<a href="infield1.html">Ranch 1</a>
-					</div>
-				</div>
-				<br>
+				
+				
 			</div>
 			<div class="tab-pane fade" id="pills-aProperty" role="tabpanel" aria-labelledby="pills-aProperty-tab">
                 <div class="row">
@@ -310,5 +397,6 @@
 		});
 	</script>
 	<script src="../assets/dk-header/js/dk-header.js"></script>
+	<script src="js/farmTracker.js"></script>
 </body>
 </html>

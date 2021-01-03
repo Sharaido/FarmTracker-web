@@ -16,5 +16,7 @@ namespace FarmTracker_web.Models.Farms
         public bool DeletedFlag { get; set; }
         public DateTime? DeletedDate { get; set; }
         public Guid? DeletedByUuid { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
+        public Categories Cu { get; set; }
     }
 }

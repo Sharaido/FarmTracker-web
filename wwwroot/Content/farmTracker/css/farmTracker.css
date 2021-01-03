@@ -119,4 +119,189 @@ body{
     border: 1px solid #aaaaaa;
     padding: .6rem;
     text-align: center;
+    
+}
+
+/* farm page */
+h1{
+    color:#337ab7;
+    font-size: 1.5rem;
+}
+.farm-container{
+    display: flex;
+    flex-flow: row wrap;
+    color: #333333;
+    align-items: flex-start;
+}
+.farm-container h1{
+    flex: 1 100%;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+.farm-container h2{
+    margin: .6rem 0;
+    flex: 1 100%;
+    font-size: 1.2rem;
+    color:#337ab7;
+}
+.farm-container .extras-container{
+    flex: 1;
+    min-width: 15rem;
+}
+.property-container-overlay{
+    flex: 3;
+    margin-right: 1.5rem;
+}
+.property-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+.property-container .property-item{
+    border: 1px solid #ddd;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 0.3rem;
+    cursor: pointer;
+    margin: .5rem;
+}
+.property-container .property-item > *{
+    max-width: 15rem;
+}
+.property-container .property-item .property-name{
+    padding: .6rem;
+    font-weight: bold;
+    color:#0f0f0f
+}
+.property-container .property-item .property-desc, .property-container .property-item .property-last-modified{
+    padding: 0 .6rem 0rem .6rem;
+    font-size: .8rem;
+    color: #808080;
+}
+
+.property-container .property-item .property-last-modified{
+    padding-bottom: .6rem;
+    font-size: .8rem;
+    color: #808080;
+}
+.property-container .property-item .property-desc, .property-container .property-item .property-last-modified, .property-container .property-item .property-name{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ioe-container{
+    display: flex;
+    flex-flow: row wrap;
+}
+.ioe-container .ioe-item{
+    flex: 1 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .6rem;
+    padding: .5rem;
+    border: 1px solid #ddd;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 0.3rem;
+}
+.ioe-container .ioe-cost, .ioe-container .ioe-name{
+    display: inline-block;
+}
+.ioe-container .ioe-cost{
+    font-weight: bold;
+    margin-right: .5rem;
+}
+.ioe-container .ioe-delete a, .collaborator-container .collaborator-item .collaborator-delete a{
+    color: #c80000;
+}
+
+
+.collaborator-container{
+    display: flex;
+    flex-flow: row wrap;
+}
+.collaborator-container .collaborator-item{
+    flex: 1 100%;
+    display: flex;
+    margin-bottom: .6rem;
+    padding: .5rem;
+    border: 1px solid #ddd;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 0.3rem;
+    align-items: center;
+    justify-content: space-between;
+}
+.collaborator-container .collaborator-item img{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+    margin-right: .5rem;
+}
+.collaborator-container .collaborator-item > div > div > div, .collaborator-container .collaborator-item > div {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+.collaborator-container .collaborator-item .collaborator-name{
+    font-weight: bold;
+}
+.collaborator-container .collaborator-item  > div > div > div > div{
+    font-size: .8rem;
+    color: #808080;
+}
+.collaborator-container .collaborator-item .collaborator-username{
+    margin-right: .5rem;
+}
+.btn-plus{
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    font-size: 1.5rem;
+    border: none;
+    background-color: #66AF33;
+    border-radius: 100%;
+    color:#fff;
+    padding: .5rem .8rem;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 .3rem 0.3rem;
+    outline: none;
+    z-index: 1;
+}
+.btn-plus:focus{
+    border: none;
+    outline: none;
+}
+
+.product-container .product-item{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .6rem;
+    padding: .5rem;
+    border: 1px solid #ddd;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 0.3rem;
+}
+.product-container .product-name{
+    display: inline-block;
+}
+.product-container .product-delete a{
+    color: #c80000;
+}
+
+.express-menu{
+    display: none;
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    max-width: 15rem;
+    background-color: #66AF33;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 0.3rem;
+}
+.express-menu.active{
+    display: block;
+}
+.express-menu a.express-menu-item{
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: .5rem 1rem;
+    transition: .3s background-color;
+}
+.express-menu a.express-menu-item:hover{
+    background-color: rgb(115, 177, 71);
 }

@@ -154,3 +154,15 @@ function printAdds(adds) {
     $('#addsContainer').html(body)
 }
 /* Get Adds END */
+
+$(document).ready(()=>{
+    $('.express-menu-btn').click((e)=>{
+        var btn = $(e.target)
+        var menuId = btn.attr("data-menu-id")
+        $(`#${menuId}`).toggleClass("active")
+    })
+    $('.express-menu-item').click((e)=>{
+        var item = $(e.target)
+        item.parent().removeClass("active")
+    })
+})

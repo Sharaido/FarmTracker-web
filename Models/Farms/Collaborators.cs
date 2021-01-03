@@ -9,6 +9,7 @@ namespace FarmTracker_web.Models.Farms
         public Guid Fuid { get; set; }
         public Guid Uuid { get; set; }
         public Guid Ruid { get; set; }
-        public Users uu { get; set; }
+        public Users Uu { get; set; }
+        public CRoles Ru { get; set; }
     }
 }
