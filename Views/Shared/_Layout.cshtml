@@ -32,98 +32,53 @@
             <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
         </div>
         <div class="dh-shortcuts">
-            <div class="dh-sc">
-                <a href="javascript:;" data-dropdown="dk-notification-box">
-                    <i class="fa fa-bell"></i>
-                    <div class="sc-num">9</div>
-                </a>
-                <div id="dk-notification-box" class="dk-notification-box hidden-xs">
-                    <div class="notifications-links">
-                        <div class="dk-notification-box-h"><img src="~/Content/img/systemPics/kardo.png" alt="" /></div>
-                        <a href="#">
-                            <div class="notifications-link">
-                                <img src="~/Content/farmTracker/img/system/f-logo.png" alt="" />
-                                <div class="noti-info">
-                                    <div class="header">Bildirim başlık</div>
-                                    <div class="explanation">Kısa Açıklama açıklama açıklama açıklama açıklama açıklama...</div>
-                                    <div class="date">01:48 | 21.08.2017</div>
-                                </div>
+            @if (User.Identity.IsAuthenticated && User.FindFirst(claim => claim.Type == "MemberType")?.Value != "1")
+            {
+                <div class="dh-sc">
+                    <a href="javascript:;" data-dropdown="dk-notification-box">
+                        <i class="fa fa-bell"></i>
+                        <div class="sc-num" id="notificationsCount">0</div>
+                    </a>
+                    <div id="dk-notification-box" class="dk-notification-box hidden-xs">
+                        <div class="notifications-links">
+                            <div class="dk-notification-box-h"><img src="~/Content/farmTracker/img/system/logo.png" alt="" /></div>
+                            <div id="notificationsContainer">
                             </div>
-                        </a>
-                        <a href="#">
-                            <div class="notifications-link">
-                                <img src="~/Content/farmTracker/img/system/f-logo.png" alt="" />
-                                <div class="noti-info">
-                                    <div class="header">Bildirim başlık</div>
-                                    <div class="explanation">Kısa Açıklama açıklama açıklama açıklama açıklama açıklama...</div>
-                                    <div class="date">01:48 | 21.08.2017</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#">
-                            <div class="notifications-link unread">
-                                <img src="~/Content/farmTracker/img/system/f-logo.png" alt="" />
-                                <div class="noti-info">
-                                    <div class="header">Bildirim başlık</div>
-                                    <div class="explanation">Kısa Açıklama açıklama açıklama açıklama açıklama açıklama...</div>
-                                    <div class="date">01:48 | 21.08.2017</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#">
-                            <div class="notifications-link">
-                                <img src="~/Content/farmTracker/img/system/f-logo.png" alt="" />
-                                <div class="noti-info">
-                                    <div class="header">Bildirim başlık</div>
-                                    <div class="explanation">Kısa Açıklama açıklama açıklama açıklama açıklama açıklama...</div>
-                                    <div class="date">01:48 | 21.08.2017</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#">
-                            <div class="notifications-link">
-                                <img src="~/Content/farmTracker/img/system/f-logo.png" alt="" />
-                                <div class="noti-info">
-                                    <div class="header">Bildirim başlık</div>
-                                    <div class="explanation">Kısa Açıklama açıklama açıklama açıklama açıklama açıklama...</div>
-                                    <div class="date">01:48 | 21.08.2017</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <a href="#" class="all-noti">Tümünü Gör</a>
-                </div>
-            </div>
-            <div class="dh-sc">
-                <a href="#" data-dropdown="dk-apps-box">
-                    <i class="fa fa-ellipsis-v"></i>
-                </a>
-                <div id="dk-apps-box" class="dk-apps-box hidden-xs">
-                    <div class="aplications">
-                        <div class="aplications-links">
-                            <a href="colors.html"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Colors</span></a>
-                            <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
-                            <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
-                            <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
-                            <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
-                            <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
-                            <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
-                            <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
-                            <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
                         </div>
+                        <a href="#" class="all-noti">Show All</a>
                     </div>
-                    <a href="#" class="all-app">Daha Fazlası</a>
                 </div>
-            </div>
+                <div class="dh-sc">
+                    <a href="#" data-dropdown="dk-apps-box">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </a>
+                    <div id="dk-apps-box" class="dk-apps-box hidden-xs">
+                        <div class="aplications">
+                            <div class="aplications-links">
+                                <a href="colors.html"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Colors</span></a>
+                                <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
+                                <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
+                                <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
+                                <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
+                                <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
+                                <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
+                                <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
+                                <a href="#"><img src="~/Content/img/systemPics/kardo-icon.png" alt="" /><span class="text">Kardo</span></a>
+                            </div>
+                        </div>
+                        <a href="#" class="all-app">Daha Fazlası</a>
+                    </div>
+                </div>
+            }
         </div>
         <nav class="dh-h-nav">
             <ul>
                 <li><a href="/">Homepage</a></li>
-                @if (User.FindFirst(claim => claim.Type == "MemberType")?.Value != "1")
-                {
-                    <li><a href="/Adds/PostAdd">Post Free Add</a></li>
-                }
-            </ul>
+                    @if (User.Identity.IsAuthenticated && User.FindFirst(claim => claim.Type == "MemberType")?.Value != "1")
+                    {
+                        <li><a href="/Adds/PostAdd">Post Free Add</a></li>
+                    }
+                </ul>
         </nav>
     </header>
     <partial name="Partials/Layout_SideNav" />

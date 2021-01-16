@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
     if ($('#farmLinks').length > 0) {
         $.ajax({
             type: "GET",
@@ -166,3 +166,50 @@ $(document).ready(()=>{
         item.parent().removeClass("active")
     })
 })
+
+
+
+
+/* Get remainders */
+$(document).ready(function () {
+    if ($('#notificationsContainer').length > 0) {
+        $.ajax({
+            type: "GET",
+            url: "/Farms/GetRemainders",
+            success: function (remainders) {
+                printRemainders(remainders)
+            }
+        })
+    }
+})
+function printRemainders(remainders) {
+    console.log(remainders)
+    var body = ''
+    var count = 0
+    if (remainders) {
+        for (remainder of remainders) {
+            if (remainder.remainderCompletedFlag != true) {
+                body += getNotificationBody(remainder)
+                count++
+            }
+        }
+    }else {
+        body = "<h2>There is no add!</h2>"
+    }
+    $('#notificationsContainer').html(body)
+    $('#notificationsCount').html(count)
+}
+function getNotificationBody(noti) {
+    body = `<a href="#">
+                <div class="notifications-link">
+                    <img src="/Content/farmTracker/img/system/alarmclock.png" alt="" />
+                    <div class="noti-info">
+                        <div class="header">${noti.name}</div>
+                        <div class="explanation">${noti.description}</div>
+                        <div class="date">${noti.remainderDate.replace('T', ' ')}</div>
+                    </div>
+                </div>
+            </a>`
+    return body
+}
+/* Get remainders END*/

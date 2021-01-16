@@ -597,5 +597,21 @@ namespace FarmTracker_web.Controllers
             }
             return false;
         }
+        [HttpGet("[controller]/GetRemainders/")]
+        public IEnumerable<EntityDetails> GetRemainders()
+        {
+            var r = StaticFunctions.Request(
+                "Farms/GetRemainders/",
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var _r = JsonConvert.DeserializeObject<IEnumerable<EntityDetails>>(r);
+                return _r;
+            }
+            return null;
+        }
     }
 }
