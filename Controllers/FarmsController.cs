@@ -613,5 +613,21 @@ namespace FarmTracker_web.Controllers
             }
             return null;
         }
+        [HttpPost("[controller]/Properties/Entities/Details/")]
+        public Collaborators UpdateEntityDetail(EntityDetails entityDetail)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/Details/",
+                JsonConvert.SerializeObject(entityDetail),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var _r = JsonConvert.DeserializeObject<Collaborators>(r);
+                return _r;
+            }
+            return null;
+        }
     }
 }

@@ -915,16 +915,20 @@ function createEntityDetailBody(detail) {
     }
 
     var icon = "far fa-file-alt"
+    var remainderCompleteBtn = ``
     if (detail.remainderDate) {
         if (detail.remainderCompletedFlag) {
             icon = `far fa-clock clr-success`
         } else {
             icon = `far fa-clock clr-primary`
+            remainderCompleteBtn = `<a href="javascript:completeRemainder('${detail.duid}');"><i class="fa fa-check-circle clr-primary mr-3"></i></a>`
         }
     }
     if (detail.cost) {
         icon = `far fa-money-bill-alt clr-danger`
     }
+
+
 
     body += `<div class="entityd-item" data-entity-detail-id="${detail.duid}" data-toggle="popover" data-html="true" data-trigger="hover" title="${detail.name}" data-content="${popoverBody}" >
 				<div>
@@ -936,7 +940,10 @@ function createEntityDetailBody(detail) {
 						</div>
 					</div>
 				</div>
-				<div class="entityd-delete"><a href="javascript:deleteEntityDetailPopup('${detail.name}', '${detail.duid}');"><i class="fa fa-times"></i></a></div>
+				<div class="entityd-delete">
+                    ${remainderCompleteBtn}
+                    <a href="javascript:deleteEntityDetailPopup('${detail.name}', '${detail.duid}');"><i class="fa fa-times"></i></a>
+                </div>
 			</div>`
         
     return body
@@ -1502,3 +1509,22 @@ function deleteEntityDetail(DUID) {
     })
 }
 /* Delete Entity Detail END */
+/* Complete Remainder */
+function completeRemainder(DUID) {
+    $.ajax({
+        type: "POST",
+        url: "/Farms/Properties/Entities/Details/",
+        data: {
+            "DUID": DUID,
+            "remainderCompletedFlag": true
+        },
+        success: function (detail) {
+            if (detail) {
+                $(`[data-entity-detail-id = "${DUID}"] .fa-check-circle`).remove()
+                $(`[data-entity-detail-id = "${DUID}"] .fa-clock`).removeClass('clr-primary')
+                $(`[data-entity-detail-id = "${DUID}"] .fa-clock`).addClass('clr-success')
+            }
+        }
+    })
+}
+/* Complete Remainder END */
