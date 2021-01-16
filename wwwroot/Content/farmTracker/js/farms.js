@@ -342,26 +342,27 @@ function getCategoryProperties(CUID) {
 }
 
 function printCategoryPropertiesInputs(cProperties) {
+    console.log(cProperties)
     var body = ''
     for (var property of cProperties) {
         body += `
                 <div class="form-group">
-                    <label for="CP_${property.puid}">${property.name}</label>`
+                    <label for="CP_${property.puid}"><b>${property.name}</b></label>`
         if (property.tu.name == "string") {
-            body += `<input type="text" id="CP_${property.puid}" name="CP_${property.puid}" class="form-control">`
+            body += `<input type="text" id="CP_${property.puid}" name="CP_${property.puid}" class="form-control" data-cp-id="${property.puid}">`
         }
         if (property.tu.name == "date") {
-            body += `<input type="date" id="CP_${property.puid}" name="CP_${property.puid}" class="form-control">`
+            body += `<input type="date" id="CP_${property.puid}" name="CP_${property.puid}" class="form-control" data-cp-id="${property.puid}">`
         }
         else if (property.tu.name == "int") {
-            body += `<input type="number" id="CP_${property.puid}" name="CP_${property.puid}" class="form-control">`
+            body += `<input type="number" id="CP_${property.puid}" name="CP_${property.puid}" class="form-control" data-cp-id="${property.puid}">`
         }
         else if (property.tu.name == "bool") {
-            body += `<input type="checkbox" id="CP_${property.puid}" name="CP_${property.puid}" class="ml-2">`
+            body += `<input type="checkbox" id="CP_${property.puid}" name="CP_${property.puid}" class="ml-2" data-cp-id="${property.puid}">`
         }
         else if (property.tu.name == "select") {
             body += `
-                    <select name="CP_${property.puid}" id="CP_${property.puid}" class="form-control"></select>`
+                    <select name="CP_${property.puid}" id="CP_${property.puid}" class="form-control" data-cp-id="${property.puid}"></select>`
             getCPSelectValues(property.puid)
         }
         
@@ -369,6 +370,7 @@ function printCategoryPropertiesInputs(cProperties) {
     }
 
     $('#categoryProperties').html(body)
+    cpUpdateEvents()
 }
 
 function getCPSelectValues(PUID) {
@@ -857,8 +859,15 @@ function getEntityCPValues(EUID) {
     })
 }
 function printEntityCPValues(values) {
+    
     for (value of values) {
-        $('#CP_' + value.puid).val(value.value)
+        if (value.value == "on") {
+            $('#CP_' + value.puid).attr("checked", "checked")
+        } else if (value.value == "off") {
+
+        } else {
+            $('#CP_' + value.puid).val(value.value)
+        }
     }
 }
 
@@ -1528,3 +1537,35 @@ function completeRemainder(DUID) {
     })
 }
 /* Complete Remainder END */
+/* Entity CP Value Update */
+function cpUpdateEvents() {
+    $('[data-cp-id]').change((e) => {
+        var EUID = window.location.href.toString().split("/").pop()
+        var val = $(e.target).val()
+        var cpId = $(e.target).attr("data-cp-id")
+        if (val == "on") {
+            if (!$(e.target).is(':checked')) {
+                val = "off"
+            }
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Farms/Properties/Entities/COPValues/",
+            data: {
+                "PUID": cpId,
+                "EUID": EUID,
+                "value": val
+            },
+            success: function (value) {
+                if (value) {
+                    console.log(value)
+                    $.bootstrapGrowl("Entity updated.", {
+                        offset: { from: 'bottom', amount: 20 },
+                        align: 'left'
+                    });
+                }
+            }
+        })
+    })
+}
+/* Entity CP Value Update END */

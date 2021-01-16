@@ -59,7 +59,7 @@
         {
             <label><b>Purchased Date:</b> @(((DateTime)Model.PurchasedDate).ToString("yyyy-MM-dd"))</label><br>
         }
-    <label><b>Cost:</b> $@String.Format("{0:0.##}", Model.Cost)</label>
+        <label><b>Cost:</b> $@String.Format("{0:0.##}", Model.Cost)</label>
 
         <div id="categoryProperties"></div>
     </div>
@@ -121,5 +121,6 @@
 </div>-->
 
 @section Scripts{
+    <script src="~/Content/farmTracker/assets/bootstrap-growl-master/jquery.bootstrap-growl.min.js"></script>
     <script src="~/Content/farmTracker/js/farms.js"></script>
 }

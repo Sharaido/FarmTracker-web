@@ -251,14 +251,19 @@ namespace FarmTracker_web.Controllers
             }
             return false;
         }
-        private void AddCOPValue(EntityCopvalues value)
+        private EntityCopvalues AddCOPValue(EntityCopvalues value)
         {
-            StaticFunctions.Request(
+            var r = StaticFunctions.Request(
                 "Farms/Properties/Entities/COPValues/",
                 JsonConvert.SerializeObject(value),
                 HttpMethod.Post,
                 User.FindFirst(claim => claim.Type == "Token")?.Value
                 );
+            if (r == null)
+            {
+                return null;
+            }
+            return JsonConvert.DeserializeObject<EntityCopvalues>(r);
         }
 
         [HttpGet("[controller]/SubCategories/{CUID}")]
@@ -614,7 +619,7 @@ namespace FarmTracker_web.Controllers
             return null;
         }
         [HttpPost("[controller]/Properties/Entities/Details/")]
-        public Collaborators UpdateEntityDetail(EntityDetails entityDetail)
+        public EntityDetails UpdateEntityDetail(EntityDetails entityDetail)
         {
             var r = StaticFunctions.Request(
                 "Farms/Properties/Entities/Details/",
@@ -624,10 +629,16 @@ namespace FarmTracker_web.Controllers
                 );
             if (r != null)
             {
-                var _r = JsonConvert.DeserializeObject<Collaborators>(r);
+                var _r = JsonConvert.DeserializeObject<EntityDetails>(r);
                 return _r;
             }
             return null;
+        }
+        [HttpPost("[controller]/Properties/Entities/COPValues/")]
+        public EntityCopvalues UpdateEntityCOPValues(EntityCopvalues copValue)
+        {
+            var r = AddCOPValue(copValue);
+            return r;
         }
     }
 }
