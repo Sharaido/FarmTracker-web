@@ -209,7 +209,7 @@ h1{
     font-weight: bold;
     margin-right: .5rem;
 }
-.ioe-container .ioe-delete a, .collaborator-container .collaborator-item .collaborator-delete a{
+.ioe-container .ioe-delete a, .collaborator-container .collaborator-item .collaborator-delete a, .entityd-container .entityd-item .entityd-delete a{
     color: #c80000;
 }
 
@@ -291,6 +291,7 @@ h1{
     max-width: 15rem;
     background-color: #66AF33;
     box-shadow: rgba(0, 0, 0, 0.3) 0 0 0.3rem;
+    z-index: 100;
 }
 .express-menu.active{
     display: block;
@@ -342,4 +343,41 @@ h1{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* Entity page */
+
+
+.entityd-container{
+    display: flex;
+    flex-flow: row wrap;
+}
+.entityd-container .entityd-item{
+    flex: 1 100%;
+    display: flex;
+    margin-bottom: .6rem;
+    padding: .5rem;
+    border: 1px solid #ddd;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 0.3rem;
+    align-items: center;
+    justify-content: space-between;
+}
+.entityd-container .entityd-item > div > i{
+    font-size: 1.5rem;
+    margin-right: .5rem;
+}
+.entityd-container .entityd-item > div > div > div, .entityd-container .entityd-item > div {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+.entityd-container .entityd-item .entityd-name{
+    font-weight: bold;
+}
+.entityd-container .entityd-item  > div > div > div > div{
+    font-size: .8rem;
+    color: #808080;
+}
+.entityd-container .entityd-item .entityd-date{
+    margin-right: .5rem;
 }

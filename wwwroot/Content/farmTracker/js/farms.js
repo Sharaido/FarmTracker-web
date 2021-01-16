@@ -913,18 +913,32 @@ function createEntityDetailBody(detail) {
             popoverBody += `<br/> <b>Completed Date: </b>${detail.remainderCompletedDate.replace('T', ' ')}`
         }
     }
-    body += `<div class="list-group-item list-group-item-action" style="color: #495057; font-weight: normal; cursor:default"
-                        data-toggle="popover" data-html="true" data-trigger="hover" title="${detail.name}" data-content="${popoverBody}" >`
+
+    var icon = "far fa-file-alt"
     if (detail.remainderDate) {
         if (detail.remainderCompletedFlag) {
-            body += `<span class="badge badge-success badge-pill">${detail.remainderCompletedDate.replace('T', ' ')}</span>`
+            icon = `far fa-clock clr-success`
         } else {
-            body += `<span class="badge badge-primary badge-pill">${detail.remainderDate.replace('T', ' ')}</span>`
+            icon = `far fa-clock clr-primary`
         }
     }
-    body += `${detail.name}
-                </div>`
+    if (detail.cost) {
+        icon = `far fa-money-bill-alt clr-danger`
+    }
 
+    body += `<div class="entityd-item" data-entity-detail-id="${detail.duid}" data-toggle="popover" data-html="true" data-trigger="hover" title="${detail.name}" data-content="${popoverBody}" >
+				<div>
+					<i class="${icon}"></i>
+					<div>
+						<div class="entityd-name">${detail.name}</div>
+						<div>
+							<div class="entityd-date">${detail.createdDate.replace('T', ' ')}</div>
+						</div>
+					</div>
+				</div>
+				<div class="entityd-delete"><a href="javascript:deleteEntityDetailPopup('${detail.name}', '${detail.duid}');"><i class="fa fa-times"></i></a></div>
+			</div>`
+        
     return body
 }
 
@@ -1008,8 +1022,9 @@ function submitAddEntityDetailForm() {
     })
 }
 function printEntityDetail(detail) {
+    console.log(detail)
     var body = createEntityDetailBody(detail)
-
+    console.log(body)
     var containerEl = $('#entityDetails')
     if (containerEl.hasClass('null-content')) {
         containerEl.removeClass('null-content')

@@ -10,13 +10,61 @@
         <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
     </ol>
 </nav>
-<div class="form-group">
-    <button class="btn btn-primary">Update</button>
-    <button class="btn btn-info" onclick="addEntityDetailPopup()"><i class="fa fa-plus"></i> Detail</button>
-    <button class="btn btn-success"  onclick="addRemainderPopup()"><i class="fa fa-plus"></i> Remainder</button>
-    <button type="button" class="btn btn-danger" onclick="deleteFPEntityPopup('@Model.Name')">Delete Entity</button>
+
+<button type="button" class="btn-plus express-menu-btn" data-menu-id="entityExpressMenu"><i class="fa fa-plus" data-menu-id="entityExpressMenu"></i></button>
+<div class="express-menu" id="entityExpressMenu">
+    <a href="javascript:deleteFPEntityPopup('@Model.Name');" class="express-menu-item">Delete Entity</a>
+    <a href="javascript:;" class="express-menu-item">Update Entity</a>
+    <a href="javascript:addEntityDetailPopup();" class="express-menu-item">Add Update</a>
+    <a href="javascript:addRemainderPopup();" class="express-menu-item">Add Remainder</a>
 </div>
-<hr>
+
+<div class="row">
+    <div class="col-sm-6">
+        <h1 data-toggle="tooltip" data-placement="top" title="Tooltip on top">Updates</h1>
+        <div id="entityDetails" class="entityd-container">
+            <div class="entityd-item">
+                <div>
+                    <i class="fa fa-money-bill-alt clr-success"></i>
+                    <div>
+                        <div class="entityd-name">Doğuş Kar</div>
+                        <div>
+                            <div class="entityd-username">doguskar</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="entityd-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+            </div>
+            <div class="entityd-item">
+                <div>
+                    <i class="fa fa-money-bill-alt clr-success"></i>
+                    <div>
+                        <div class="entityd-name">Doğuş Kar</div>
+                    </div>
+                </div>
+                <div class="entityd-delete"><a href="#"><i class="fa fa-times"></i></a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <h1>Details</h1>
+        <input type="hidden" id="hiddenCUID" value="@Model.Cuid">
+        <input type="hidden" id="hiddenEUID" value="@Model.Euid">
+        <label><b>ID:</b> @Model.Id</label><br>
+        <label><b>Category:</b> @Model.Cu.Name</label><br>
+        <label><b>Name:</b> @Model.Name</label><br>
+        <label><b>Description:</b> @Model.Description</label><br>
+        <label><b>Count:</b> @Model.Count</label><br>
+        @if (Model.PurchasedDate != null)
+        {
+            <label><b>Purchased Date:</b> @(((DateTime)Model.PurchasedDate).ToString("yyyy-MM-dd"))</label><br>
+        }
+    <label><b>Cost:</b> $@String.Format("{0:0.##}", Model.Cost)</label>
+
+        <div id="categoryProperties"></div>
+    </div>
+</div>
+<!--
 <div class="row">
     <div class="col-sm-6">
         <h1>Entity Informations</h1>
@@ -70,7 +118,7 @@
             <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
         </div>
     </div>
-</div>
+</div>-->
 
 @section Scripts{
     <script src="~/Content/farmTracker/js/farms.js"></script>
