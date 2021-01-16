@@ -1468,3 +1468,37 @@ function deleteCollaborator(UUID, FUID) {
     })
 }
 /* Delete Collaborator END */
+
+/* Delete Entity Detail */
+function deleteEntityDetailPopup(name, DUID, e) {
+    dkPopupElDeleteEntityDetail = dkPopup({
+        model: 'simple-confirm',
+        title: 'Delete Entity Update',
+        type: 'confirm',
+        confirmClick: function () {
+            deleteEntityDetail(DUID)
+        },
+        content: `Do you want to delete <strong>${name}</strong>`
+    })
+}
+function deleteEntityDetail(DUID) {
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "DELETE",
+        url: "/Farms/Properties/Entities/Details/" + DUID,
+        success: function (result) {
+            if (result) {
+                $(`[data-entity-detail-id="${DUID}"]`).remove()
+                dkPopupElDeleteEntityDetail.closeDkPop();
+                removeLoading()
+            } else {
+                alert("EntityDetail could not be deleted #1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        }
+    })
+}
+/* Delete Entity Detail END */

@@ -581,5 +581,21 @@ namespace FarmTracker_web.Controllers
             }
             return false;
         }
+
+        [HttpDelete("[controller]/Properties/Entities/Details/{DUID}")]
+        public bool DeleteEntityDetail(string DUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Entities/Details/" + DUID,
+                "",
+                HttpMethod.Delete,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                return JsonConvert.DeserializeObject<bool>(r);
+            }
+            return false;
+        }
     }
 }
