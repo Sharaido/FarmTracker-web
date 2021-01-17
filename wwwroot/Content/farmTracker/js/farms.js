@@ -28,7 +28,7 @@ function printProperties(properties) {
         }
     }
     if (!allBody) {
-        allBody = "<h1>This farm have not any property!</h1>"
+        allBody = "<p>This farm have not any property!</p>"
         $('#allProperties').addClass('null-content')
     }
     $('#allProperties .out-of-middle').remove()
@@ -78,7 +78,7 @@ function printEntities(entities) {
     }
 
     if (!allEntitiesBody) {
-        allEntitiesBody = "<h1>This property have not any entity!</h1>"
+        allEntitiesBody = "<p>This property have not any entity!</p>"
         $('#entities').addClass("null-content")
     }
 
@@ -458,7 +458,7 @@ function addFPEntityFormValidations() {
 function printEntity(entity) {
     var body = getEntityBody(entity)
     if (!body)
-        body = "<h1>This property have not any entity!</h1>"
+        body = "<p>This property have not any entity!</p>"
 
     if ($('#entities').hasClass('null-content')) {
         $('#entities').removeClass('null-content')
@@ -511,11 +511,11 @@ function printIncomeAndExpenses(incomeAndExpenses) {
         $('#lastIoeContainer').addClass('null-content')
     }
     if (!iBody) {
-        iBody = "<h1>This farm have not any income!</h1>"
+        iBody = "<p>This farm have not any income!</p>"
         $('#incomesContainer').addClass('null-content')
     }
     if (!eBody) {
-        eBody = "<h1>This farm have not any expense!</h1>"
+        eBody = "<p>This farm have not any expense!</p>"
         $('#expensesContainer').addClass('null-content')
     }
 
@@ -899,7 +899,7 @@ function printEntityDetails(values) {
         }
     }
     if (!body) {
-        body = "<h3>This entity have not any detail!</h3>"
+        body = "<p>This entity have not any update!</p>"
         $('#entityDetails').addClass('null-content')
     }
 
@@ -1569,3 +1569,287 @@ function cpUpdateEvents() {
     })
 }
 /* Entity CP Value Update END */
+
+
+
+
+
+
+
+/* Property Details */
+/*GET*/
+$(document).ready(function () {
+    if ($("#propertyDetails").length > 0) {
+        getPDetails($("#hiddenPUID").val())
+    }
+})
+function getPDetails(PUID) {
+    $.ajax({
+        type: "GET",
+        url: "/Farms/Properties/Details/" + PUID,
+        success: function (values) {
+            printPDetails(values)
+        },
+        error: function () {
+            alert("PDetails could not be received #2")
+        }
+    })
+}
+function printPDetails(values) {
+    var body = ''
+    if (values) {
+        for (detail of values) {
+            body += getPDetailBody(detail)
+        }
+    }
+    if (!body) {
+        body = "<p>This property have not any update!</p>"
+        $('#propertyDetails').addClass('null-content')
+    }
+
+    $("#propertyDetails").html(body)
+    $('[data-toggle="popover"]').popover()
+}
+/*GET END*/
+function getPDetailBody(detail) {
+    var body = ''
+    var popoverBody = ''
+    if (detail.description) {
+        popoverBody += `${detail.description}`
+    }
+    if (detail.cost) {
+        popoverBody += `<br/> <b>Cost: </b> ${detail.cost}`
+    }
+    if (detail.remainderDate) {
+        popoverBody += `<br/> <b>Remainer Date : </b> ${detail.remainderDate.replace('T', ' ')}`
+        if (detail.remainderCompletedFlag) {
+            popoverBody += `<br/> <b>Completed Date: </b>${detail.remainderCompletedDate.replace('T', ' ')}`
+        }
+    }
+
+    var icon = "far fa-file-alt"
+    var remainderCompleteBtn = ``
+    if (detail.remainderDate) {
+        if (detail.remainderCompletedFlag) {
+            icon = `far fa-clock clr-success`
+        } else {
+            icon = `far fa-clock clr-primary`
+            remainderCompleteBtn = `<a href="javascript:completePRemainder('${detail.duid}');"><i class="fa fa-check-circle clr-primary mr-3"></i></a>`
+        }
+    }
+    if (detail.cost) {
+        icon = `far fa-money-bill-alt clr-danger`
+    }
+
+
+
+    body += `<div class="entityd-item" data-entity-detail-id="${detail.duid}" data-toggle="popover" data-html="true" data-trigger="hover" title="${detail.name}" data-content="${popoverBody}" >
+				<div>
+					<i class="${icon}"></i>
+					<div>
+						<div class="entityd-name">${detail.name}</div>
+						<div>
+							<div class="entityd-date">${detail.createdDate.replace('T', ' ')}</div>
+						</div>
+					</div>
+				</div>
+				<div class="entityd-delete">
+                    ${remainderCompleteBtn}
+                    <a href="javascript:deletePDetailPopup('${detail.name}', '${detail.duid}');"><i class="fa fa-times"></i></a>
+                </div>
+			</div>`
+
+    return body
+}
+/*ADD*/
+function addPDetailPopup() {
+    var formBody = `
+    <div class="container">
+        <form id="addEntityDetailForm" method="POST">
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" id="Name" name="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea id="Description" name="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="Cost">Cost</label>
+                <input type="number" id="Cost" name="Cost" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="ExpenseFlag"><input type="checkbox" id="ExpenseFlag" name="ExpenseFlag" value="true" checked> Add expenses</label>
+            </div>
+            <input type="hidden" id="PUID" name="PUID" value="${$('#hiddenPUID').val()}">
+        </form>
+    </div>`
+    addEntityDetailPopupEl = dkPopup({
+        title: 'Add Property Update',
+        type: 'confirm',
+        confirmClick: function () {
+            submitAddPDetailForm()
+        },
+        content: formBody
+    })
+    addAddEntityDetailFormValidations()
+}
+function submitAddPDetailForm() {
+    if (!$("#addEntityDetailForm").valid()) {
+        return;
+    }
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($("#addEntityDetailForm"))
+    $.ajax({
+        type: "POST",
+        url: "/Farms/Properties/Details",
+        data: $('#addEntityDetailForm').serialize(),
+        success: function (detail) {
+            if (detail) {
+                addEntityDetailPopupEl.closeDkPop();
+                printPDetail(detail)
+                removeLoading()
+            } else {
+                alert("Property detail could not be inserted#1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("Property detail not be inserted#2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+function printPDetail(detail) {
+    console.log(detail)
+    var body = getPDetailBody(detail)
+    console.log(body)
+    var containerEl = $('#propertyDetails')
+    if (containerEl.hasClass('null-content')) {
+        containerEl.removeClass('null-content')
+        containerEl.html("")
+    }
+    containerEl.prepend(body)
+    $('[data-toggle="popover"]').popover()
+}
+/*ADD END*/
+/*ADD Remainder*/
+function addPRemainderPopup() {
+    var formBody = `
+    <div class="container">
+        <form id="addRemainderForm" method="POST">
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" id="Name" name="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea id="Description" name="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="RDate">Remainder Date</label>
+                <input type="date" id="RDate" name="RDate" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="RTime">Remainder Time</label>
+                <input type="time" id="RTime" name="RTime" class="form-control">
+            </div>
+            <input type="hidden" id="PUID" name="PUID" value="${$('#hiddenPUID').val()}">
+        </form>
+    </div>`
+    addRemainderPopupEl = dkPopup({
+        title: 'Add Remainder',
+        type: 'confirm',
+        confirmClick: function () {
+            submitAddPRemainderForm()
+        },
+        content: formBody
+    })
+    addRemainderFormValidations()
+}
+function submitAddPRemainderForm() {
+    if (!$("#addRemainderForm").valid()) {
+        return;
+    }
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($("#addRemainderForm"))
+    $.ajax({
+        type: "POST",
+        url: "/Farms/Properties/Details",
+        data: $('#addRemainderForm').serialize(),
+        success: function (detail) {
+            if (detail) {
+                addRemainderPopupEl.closeDkPop();
+                printPDetail(detail)
+                removeLoading()
+            } else {
+                alert("Remainder could not be inserted#1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        },
+        error: function () {
+            alert("Remainder not be inserted#2")
+            confirmBtn.removeAttr('disabled').removeClass('disabled')
+            removeLoading()
+        }
+    })
+}
+/*ADD Remainder END*/
+/*DELETE */
+function deletePDetailPopup(name, DUID, e) {
+    dkPopupElDeleteEntityDetail = dkPopup({
+        model: 'simple-confirm',
+        title: 'Delete Entity Update',
+        type: 'confirm',
+        confirmClick: function () {
+            deletePDetail(DUID)
+        },
+        content: `Do you want to delete <strong>${name}</strong>`
+    })
+}
+function deletePDetail(DUID) {
+    var confirmBtn = $(".dk-popup a.pop-btn.primary")
+    confirmBtn.attr('disabled', 'disabled').addClass('disabled')
+    showLoading($(".dk-popup"))
+    $.ajax({
+        type: "DELETE",
+        url: "/Farms/Properties/Details/" + DUID,
+        success: function (result) {
+            if (result) {
+                $(`[data-entity-detail-id="${DUID}"]`).remove()
+                dkPopupElDeleteEntityDetail.closeDkPop();
+                removeLoading()
+            } else {
+                alert("EntityDetail could not be deleted #1")
+                confirmBtn.removeAttr('disabled').removeClass('disabled')
+                removeLoading()
+            }
+        }
+    })
+}
+/*DELETE END*/
+/*COMPLETE Remainder*/
+function completePRemainder(DUID) {
+    $.ajax({
+        type: "POST",
+        url: "/Farms/Properties/Details/",
+        data: {
+            "DUID": DUID,
+            "remainderCompletedFlag": true
+        },
+        success: function (detail) {
+            if (detail) {
+                $(`[data-entity-detail-id = "${DUID}"] .fa-check-circle`).remove()
+                $(`[data-entity-detail-id = "${DUID}"] .fa-clock`).removeClass('clr-primary')
+                $(`[data-entity-detail-id = "${DUID}"] .fa-clock`).addClass('clr-success')
+            }
+        }
+    })
+}
+/*COMPLETE Remainder END*/
+/* Property Details END */

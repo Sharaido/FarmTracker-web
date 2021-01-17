@@ -13,6 +13,8 @@
     <div class="express-menu" id="farmExpressMenu">
         <a href="javascript:deleteFarmPropertyPopup('@Model.Name');" class="express-menu-item">Delete Property</a>
         <a href="javascript:addFPEntityPopup();" class="express-menu-item">Add Entity</a>
+        <a href="javascript:addPDetailPopup();" class="express-menu-item">Add Update</a>
+        <a href="javascript:addPRemainderPopup();" class="express-menu-item">Add Remainder</a>
     </div>
     <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Search Properties" aria-label="Search Entities" aria-describedby="basic-addon2">
@@ -20,11 +22,24 @@
             <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
         </div>
     </div>
-    <div class="entity-container" id="entities">
-        <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+    <div class="row">
+        <div class="col-sm-8">
+            <h1>Entities</h1>
+            <div class="entity-container" id="entities">
+                <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <h1>Updates</h1>
+            <div class="entityd-container" id="propertyDetails">
+                <div class="out-of-middle"><div class="middle"><div style="text-align:center"><div class="lds-ripple"><div></div><div></div></div></div></div></div>
+            </div>
+        </div>
     </div>
+    
 </div>
 <input type="hidden" id="PCUID" value="@Model.Cuid" />
+<input type="hidden" id="hiddenPUID" value="@Model.Puid" />
 
 @section Scripts{
     <script src="~/Content/farmTracker/js/farms.js"></script>

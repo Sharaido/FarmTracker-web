@@ -640,5 +640,76 @@ namespace FarmTracker_web.Controllers
             var r = AddCOPValue(copValue);
             return r;
         }
+
+
+
+
+        [HttpGet("[controller]/Properties/Details/{PUID}")]
+        public IEnumerable<PropertyDetail> GetPDetails(string PUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Details/" + PUID,
+                "",
+                HttpMethod.Get,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                var values = JsonConvert.DeserializeObject<IEnumerable<PropertyDetail>>(r);
+                return values;
+            }
+            return null;
+        }
+        [HttpPost("[controller]/Properties/Details/")]
+        public PropertyDetail AddPDetail(PropertyDetail detail)
+        {
+            if (detail.RDate != null && detail.RTime != null)
+            {
+                var date = DateTime.MinValue;
+                if (DateTime.TryParse($"{detail.RDate}T{detail.RTime}", out date))
+                {
+                    detail.RemainderDate = date;
+                }
+            }
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Details/",
+                JsonConvert.SerializeObject(detail),
+                HttpMethod.Post,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (detail.ExpenseFlag && detail.Cost != null && detail.Cost != 0)
+            {
+                var r2 = AddExpense(new IncomeAndExpeneses
+                {
+                    Fuid = new Guid(Sessions.CurrentFarmUID),
+                    Cost = (decimal)detail.Cost,
+                    Date = DateTime.Now,
+                    Head = detail.Name,
+                    Description = detail.Description
+                });
+            }
+            if (r != null)
+            {
+                var _detail = JsonConvert.DeserializeObject<PropertyDetail>(r);
+                return _detail;
+            }
+            return null;
+        }
+
+        [HttpDelete("[controller]/Properties/Details/{DUID}")]
+        public bool DeletePDetail(string DUID)
+        {
+            var r = StaticFunctions.Request(
+                "Farms/Properties/Details/" + DUID,
+                "",
+                HttpMethod.Delete,
+                User.FindFirst(claim => claim.Type == "Token")?.Value
+                );
+            if (r != null)
+            {
+                return JsonConvert.DeserializeObject<bool>(r);
+            }
+            return false;
+        }
     }
 }
